@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Sonification with Atmospheric Drums</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/15.1.5/Tone.js"></script>
+  
+  <!-- UI Elements -->
+  <style>
+    body {
+      font-family: "Lucida Console", monospace;
+      padding: 20px;
+      background-color:rgb(240, 240, 240);
+    }
+    #progressContainer {
+      margin-top: 10px;
+      width: 100%;
+      background: #ddd;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #301934, #aea3d4);
+      transition: width 0.2s;
+    }
+    #downloadLink, #previewButton {
+      margin-top: 15px;
+      display: none;
+      padding: 8px 15px;
+      background: #301934;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: monospace;
+    }
+    #previewButton {
+      margin-right: 10px;
+    }
+    #audioPlayer {
+      margin-top: 15px;
+      width: 100%;
+      display: none;
+    }
+    #colorMap {
+      margin: 20px 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #colorMap th, #colorMap td {
+      border: 0.5px solid #383832;
+      padding: 6px;
+      text-align: left;
+    }
+    #colorMap th {
+      background-color: #FFFDD0;
+    }
+    .color-swatch {
+      width: 15px;
+      height: 15px;
+      border: 0.5px solid #383832;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h2>PCA Video to Audio</h2>
+  <input type="file" id="uploadVid" accept="video/*" />
+  <button id="startButton">Sonify it!</button>
+
+  <h3>Color to Note Mapping</h3>
+  <table id="colorMap">
+    <thead>
+      <tr>
+        <th>Color Range</th>
+        <th>Note</th>
+        <th>Hex Codes</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <div id="progressContainer">
+    <div id="progressBar"></div>
+  </div>
+
+  <div class="button-container">
+    <button id="previewButton">Preview Sound</button>
+    <a id="downloadLink" href="#" download="output.mp3">Download MP3</a>
+  </div>
+
+  <audio id="audioPlayer" controls></audio>
+
+  <canvas id="videoCanvas" style="display:none;"></canvas>
+
+  <script>
+    const canvas = document.getElementById("videoCanvas");
+    const ctx = canvas.getContext("2d");
+    const recorder = new Tone.Recorder();
+    
+    // POLYPHONIC SYNTH FOR CHORD PLAY | CONNECT TO RECORDER
+    const polySynth = new Tone.PolySynth(Tone.AMSynth, {
+      harmonicity: .501, 
+      modulationIndex: 1.2,
+      oscillator: { type: "sine" },
+      envelope:{
+        attack: 6, 
+        decay: 3, 
+        sustain: 0.7,
+        release: 8
+      },
+      modulation: {
+        type: "sine"
+      },
+      modulationEnvelope:{
+        attack: 5, 
+        decay: 4, 
+        sustain: 0.2,
+        release: 6
+      },
+    }).connect(recorder);
+
+    // ATMOSPHERIC BOOMING PERCUSSION INSTRUMENTS
+    const kick = new Tone.MembraneSynth({
+      pitchDecay: 0.2,
+      octaves: 8,
+      oscillator: { type: "sine" },
+      envelope: {
+        attack: 0.001,
+        decay: 1.5,
+        sustain: 0.01,
+        release: 1.8,
+        attackCurve: "exponential"
+      }
+    }).connect(recorder);
+
+    // Deep resonant tom
+    const floorTom = new Tone.MembraneSynth({
+      pitchDecay: 0.3,
+      octaves: 6,
+      oscillator: { type: "sine" },
+      envelope: {
+        attack: 0.001,
+        decay: 2,
+        sustain: 0.01,
+        release: 2.5,
+      }
+    }).connect(recorder);
+
+    // Atmospheric cymbal/shimmer
+    const cymbal = new Tone.MetalSynth({
+      frequency: 120,
+      envelope: {
+        attack: 0.002,
+        decay: 3,
+        release: 2
+      },
+      harmonicity: 8.1,
+      modulationIndex: 64,
+      resonance: 2000,
+      octaves: 2.5
+    }).connect(recorder);
+
+    // Deep booming bass drum
+    const subBass = new Tone.MonoSynth({
+      oscillator: { type: "sine" },
+      envelope: {
+        attack: 0.001,
+        decay: 2,
+        sustain: 0.01,
+        release: 3
+      },
+      filterEnvelope: {
+        attack: 0.001,
+        decay: 1,
+        sustain: 0.5,
+        release: 2,
+        baseFrequency: 30,
+        octaves: 3
+      }
+    }).connect(recorder);
+
+    // SET VOLUMES FOR ATMOSPHERIC MIX
+    polySynth.volume.value = -6;
+    kick.volume.value = -10;
+    floorTom.volume.value = -12;
+    cymbal.volume.value = -20;
+    subBass.volume.value = -8;
+
+    // ADD REVERB TO PERCUSSION FOR ATMOSPHERE
+    const drumReverb = new Tone.Reverb({
+      decay: 8,
+      wet: 0.6,
+      preDelay: 0.2
+    }).connect(recorder);
+    
+    // Route all drums through the reverb
+    kick.connect(drumReverb);
+    floorTom.connect(drumReverb);
+    cymbal.connect(drumReverb);
+    subBass.connect(drumReverb);
+
+    // PANNER FOR EACH CHORD --> L or R PLAY
+    const panner = new Tone.Panner().connect(recorder);
+    polySynth.connect(panner);
+
+    const feedbackDelay = new Tone.FeedbackDelay({
+      delayTime: 1.8,
+      feedback: 0.4,
+      wet: 0.6
+    });
+
+    const bandpass = new Tone.Filter({
+      type: "lowpass",
+      frequency: 800,
+      Q: 0.5
+    });
+
+    feedbackDelay.connect(bandpass);
+    bandpass.connect(recorder);
+
+    //PHASER EFFECT
+    const phaser = new Tone.Phaser({
+      frequency: 1,
+      feedback: 4,
+      baseFrequency:500
+    }).connect(recorder);
+    
+    //PHASER MAPPED WITH DELAY (FOR DURATION)
+    feedbackDelay.connect(phaser);
+
+    //REVERB 
+    const reverb = new Tone.Reverb({
+      decay: 3, 
+      wet: 0.4,
+      preDelay: 0.1, 
+      highFrequencyCutoff: 5000
+    }).connect(recorder); 
+    phaser.connect(reverb);
+    
+    // COLOR NOTE MAPPING
+    // const colorNoteMap = [
+    //   { range: 'Red',    note: 'Eb2', hex: '#FF0000-#FF5E5E' },
+    //   { range: 'Orange', note: 'F2', hex: '#FF6A00-#FFB563' },
+    //   { range: 'Yellow', note: 'A2', hex: '#FFD700-#FFF380' },
+    //   { range: 'Green',  note: 'Bb2', hex: '#00FF00-#90EE90' },
+    //   { range: 'Teal',   note: 'D2', hex: '#008080-#20B2AA' },
+    //   { range: 'Blue',   note: 'F1', hex: '#0000FF-#87CEFA' },
+    //   { range: 'Purple', note: 'G1', hex: '#800080-#D8BFD8' },
+    //   { range: 'Pink',   note: 'C3', hex: '#FFC0CB-#FF69B4' },
+    //   { range: 'Brown',  note: 'D1', hex: '#A52A2A-#D2B48C' },
+    //   { range: 'Gray',   note: 'Eb1', hex: '#808080-#D3D3D3' },
+    //   { range: 'White',  note: 'G3', hex: '#FFFFFF-#F5F5F5' },
+    //   { range: 'Black',  note: 'C1', hex: '#000000-#333333' }
+    // ];
+
+
+        // COLOR NOTE MAPPING
+    const colorNoteMap = [
+      { range: 'Red',    note: 'Eb1', hex: '#FF0000-#FF5E5E' },
+      { range: 'Orange', note: 'F1', hex: '#FF6A00-#FFB563' },
+      { range: 'Yellow', note: 'A1', hex: '#FFD700-#FFF380' },
+      { range: 'Green',  note: 'Bb1', hex: '#00FF00-#90EE90' },
+      { range: 'Teal',   note: 'D2', hex: '#008080-#20B2AA' },
+      { range: 'Blue',   note: 'F2', hex: '#0000FF-#87CEFA' },
+      { range: 'Purple', note: 'G2', hex: '#800080-#D8BFD8' },
+      { range: 'Pink',   note: 'C3', hex: '#FFC0CB-#FF69B4' },
+      { range: 'Brown',  note: 'D1', hex: '#A52A2A-#D2B48C' },
+      { range: 'Gray',   note: 'Eb2', hex: '#808080-#D3D3D3' },
+      { range: 'White',  note: 'G3', hex: '#FFFFFF-#F5F5F5' },
+      { range: 'Black',  note: 'C1', hex: '#000000-#333333' }
+    ];
+
+    //COLOR MAPPING TABLE FOR WEB DISPALY
+    const tableBody = document.querySelector('#colorMap tbody');
+    colorNoteMap.forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${item.range}</td>
+        <td>${item.note}</td>
+        <td><span class="color-swatch" style="background: ${item.hex.split('-')[0]}"></span>${item.hex}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+
+    // Get the most prominent colors in the frame
+    const getProminentColors = (frameData, count = 5) => {
+      const data = frameData.data;
+      const colorMap = {};
+      
+      // Sample pixels (every 10th pixel for performance)
+      for (let i = 0; i < data.length; i += 40) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const hex = rgbToHex(r, g, b);
+        
+        // Group similar colors
+        const quantizedHex = quantizeColor(hex);
+        colorMap[quantizedHex] = (colorMap[quantizedHex] || 0) + 1;
+      }
+      
+      // Sort by frequency and get top colors
+      return Object.entries(colorMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, count)
+        .map(([hex, count]) => ({ hex, count }));
+    };
+
+    // Convert RGB to hex
+    const rgbToHex = (r, g, b) => {
+      return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    };
+
+    // Quantize color to simplify grouping
+    const quantizeColor = (hex) => {
+      const r = parseInt(hex.substr(1, 2), 16);
+      const g = parseInt(hex.substr(3, 2), 16);
+      const b = parseInt(hex.substr(5, 2), 16);
+      
+      let closestColor = null;
+      let minimumDistance = Infinity;
+      
+      colorNoteMap.forEach(item => {
+        const [startHex, endHex] = item.hex.split('-');
+        const startRgb = hexToRgb(startHex);
+        const endRgb = hexToRgb(endHex);
+        
+        const distance = Math.min(
+          colorDistance(r, g, b, startRgb.r, startRgb.g, startRgb.b),
+          colorDistance(r, g, b, endRgb.r, endRgb.g, endRgb.b)
+        );
+        
+        if (distance < minimumDistance) {
+          minimumDistance = distance;
+          closestColor = item;
+        }
+      });
+      
+      return closestColor ? closestColor.hex.split('-')[0] : hex;
+    };
+
+    // Calculate color distance using Euclidean distance
+    const colorDistance = (r1, g1, b1, r2, g2, b2) => {
+      return Math.sqrt(
+        Math.pow(r2 - r1, 2) + 
+        Math.pow(g2 - g1, 2) + 
+        Math.pow(b2 - b1, 2)
+      );
+    };
+
+    // Convert hex to RGB
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.substr(1, 2), 16);
+      const g = parseInt(hex.substr(3, 2), 16);
+      const b = parseInt(hex.substr(5, 2), 16);
+      return { r, g, b };
+    };
+        
+    // Map hex color to note based on our predefined mapping
+    const colorToNote = (hex) => {
+      const rgb = hexToRgb(hex);
+      let closestNote = null;
+      let minimumDistance = Infinity;
+      
+      colorNoteMap.forEach(item => {
+        const [startHex, endHex] = item.hex.split('-');
+        const startRgb = hexToRgb(startHex);
+        const endRgb = hexToRgb(endHex);
+        
+        const rangeMidpoint = {
+          r: (startRgb.r + endRgb.r) / 2,
+          g: (startRgb.g + endRgb.g) / 2,
+          b: (startRgb.b + endRgb.b) / 2
+        };
+        
+        const distance = colorDistance(
+          rgb.r, rgb.g, rgb.b,
+          rangeMidpoint.r,
+          rangeMidpoint.g,
+          rangeMidpoint.b
+        );
+        
+        if (distance < minimumDistance) {
+          minimumDistance = distance;
+          closestNote = item.note;
+        }
+      });
+      
+      return closestNote || 'C4';
+    };
+
+    // Calculate left/right balance of a color
+    const getColorPosition = (frameData, hex) => {
+      const rgb = hexToRgb(hex);
+      const data = frameData.data;
+      let leftCount = 0;
+      let rightCount = 0;
+      let total = 0;
+      
+      const width = frameData.width;
+      const height = frameData.height;
+      
+      for (let y = 0; y < height; y += 5) {
+        for (let x = 0; x < width; x += 5) {
+          const i = (y * width + x) * 4;
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          if (
+            Math.abs(r - rgb.r) < 30 &&
+            Math.abs(g - rgb.g) < 30 &&
+            Math.abs(b - rgb.b) < 30
+          ) {
+            if (x < width / 2) leftCount++;
+            else rightCount++;
+            total++;
+          }
+        }
+      }
+      
+      if (total === 0) return 0;
+      return (rightCount - leftCount) / total;
+    };
+
+    // Calculate frame difference for percussion triggers
+    const calculateFrameDifference = (prevFrame, currentFrame) => {
+      if (!prevFrame) return 0;
+      
+      const prevData = prevFrame.data;
+      const currData = currentFrame.data;
+      let diff = 0;
+      
+      // Sample every 20th pixel for performance
+      for (let i = 0; i < prevData.length; i += 80) {
+        diff += Math.abs(prevData[i] - currData[i]);
+        diff += Math.abs(prevData[i+1] - currData[i+1]);
+        diff += Math.abs(prevData[i+2] - currData[i+2]);
+      }
+      
+      // Normalize the difference
+      return diff / (prevData.length / 80 * 3 * 255);
+    };
+
+    // Store the generated audio URL for preview
+    let generatedAudioUrl = null;
+
+    document.getElementById("startButton").onclick = async () => {
+      const file = document.getElementById("uploadVid").files[0];
+      if (!file) return alert("Please upload a video file first.");
+      const url = URL.createObjectURL(file);
+      const video = document.createElement("video");
+      video.src = url;
+      video.crossOrigin = "anonymous";
+      video.load();
+
+      video.onloadeddata = async () => {
+        const frameRate = 1; 
+        const frameDuration = 1 / frameRate;
+        const duration = Math.floor(video.duration);
+        const totalFrames = duration * frameRate;
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        await Tone.start();
+        recorder.start();
+
+        const updateProgress = (index) => {
+          const bar = document.getElementById("progressBar");
+          bar.style.width = `${(index / totalFrames) * 100}%`;
+        };
+
+        let prevFrame = null;
+
+        for (let i = 0; i < totalFrames; i++) {
+          video.currentTime = i * frameDuration;
+
+          await new Promise((res) => {
+            video.onseeked = () => {
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              const frameData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              
+              // Get prominent colors
+              const prominentColors = getProminentColors(frameData, 3);
+              
+              // Calculate progress (0 to 1)
+              const progress = i / totalFrames;
+              
+              // Increase echo effect over time
+              feedbackDelay.delayTime = 0.3 + (progress * 0.7);
+              feedbackDelay.feedback = 0.5 + (progress * 0.3);
+              feedbackDelay.wet.value = 0.3 + (progress * 0.4);
+              
+              // Play all prominent colors at once
+              prominentColors.forEach(colorObj => {
+                const note = colorToNote(colorObj.hex);
+                const position = getColorPosition(frameData, colorObj.hex);
+                
+                const duration = 0.5 + (colorObj.count / 10000) * 1.5;
+                const volume = -20 + (colorObj.count / 1000) * 20;
+                
+                panner.pan.value = position;
+                
+                polySynth.triggerAttackRelease(
+                  note, 
+                  duration, 
+                  Tone.now() + i * frameDuration,
+                  volume / 100
+                );
+              });
+
+              // ATMOSPHERIC PERCUSSION TRIGGERING (ALWAYS ON)
+              if (i > 0) {
+                const frameDiff = calculateFrameDifference(prevFrame, frameData);
+                
+                if (frameDiff > 0.08) {
+                  const playTime = Tone.now() + i * frameDuration;
+                  const velocity = Math.min(0.3 + frameDiff * 1.5, 0.9);
+                  
+                  // Deep sub bass on significant changes
+                  if (frameDiff > 0.15) {
+                    subBass.triggerAttackRelease("C0", "1n", playTime, velocity * 0.7);
+                  }
+                  
+                  // Boomy kick with longer tail
+                  if (frameDiff > 0.12) {
+                    kick.triggerAttackRelease("C1", "2n", playTime, velocity * 0.6);
+                  }
+                  
+                  // Resonant floor tom
+                  if (frameDiff > 0.1) {
+                    floorTom.triggerAttackRelease("F1", "2n", playTime + 0.05, velocity * 0.5);
+                  }
+                  
+                  // Atmospheric cymbal swell
+                  cymbal.triggerAttackRelease("C6", "4n", playTime + 0.1, velocity * 0.3);
+                }
+              }
+              
+              prevFrame = frameData;
+              updateProgress(i);
+              res();
+            };
+          });
+        }
+
+        setTimeout(async () => {
+          const audio = await recorder.stop();
+          generatedAudioUrl = URL.createObjectURL(audio);
+          const link = document.getElementById("downloadLink");
+          link.href = generatedAudioUrl;
+          link.style.display = "inline";
+          document.getElementById("previewButton").style.display = "inline";
+          document.getElementById("progressBar").style.width = "100%";
+        }, totalFrames * 500 + 500);
+      };
+    };
+
+    // Add preview functionality
+    document.getElementById("previewButton").onclick = () => {
+      if (!generatedAudioUrl) return;
+      
+      const audioPlayer = document.getElementById("audioPlayer");
+      audioPlayer.src = generatedAudioUrl;
+      audioPlayer.style.display = "block";
+      audioPlayer.play();
+    };
+  </script>
+</body>
+</html>

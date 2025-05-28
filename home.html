@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spectral Sounds</title>
+  <style> 
+    body { margin: 0; } 
+    #globeViz {
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100vw;
+      height: 100vh;
+      cursor: pointer;
+      transition: filter 0.3s ease;
+    }
+
+    .titleTop {
+      position: absolute; 
+      top: 3vh; 
+      left: 2vw; 
+      color: white; 
+      font-family: monospace; 
+      font-size: clamp(2rem, 5vw, 5rem);
+      /* background: rgba(0, 0, 0, 0.5);  */
+      padding: 1vh 1.5vw; 
+      border-radius: 1vh;
+       max-width: 15vw;
+      pointer-events: none;
+      /* z-index: 10;  */
+    }
+    .titleBottom {
+      position: absolute; 
+      top: 15vh; 
+      left: 2vw; 
+      color: white; 
+      font-family: monospace; 
+      font-size: clamp(2rem, 5vw, 5rem);
+     /* background: rgba(0, 0, 0, 0.5);  */
+      padding: 1vh 1.5vw; 
+      border-radius: 1vh;
+      pointer-events: none;
+       /* z-index: 10;  */
+    }
+    /* .info{
+      position: absolute; 
+      top: 65vh; 
+      left: 2vw; 
+      color: white; 
+      font-family: monospace; 
+      font-size: clamp(0.875rem, 1.25vw, 0.625rem); */
+      /* background: rgba(0, 0, 0, 0.5);  */
+      /* padding: 1vh 1.5vw; 
+      border-radius: 1vh;
+      pointer-events: none; */
+       /* z-index: 10;  */
+    /* } */
+    .info-button{
+      position: absolute;
+      bottom: 3vh; 
+      left: 2vw; 
+      background: #333; 
+      color: #fff; 
+      border: none; 
+      padding: 10px 15px; 
+      cursor: pointer; 
+      /* z-index: 1000;  */
+      border-radius: 5px; 
+      font-family: monospace; 
+    }
+    .modal-overlay{
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      background: rgba(0, 0, 0, 0.8); 
+      display: none; 
+      justify-content: center; 
+      align-items: center; 
+      z-index: 999; 
+      font-family: monospace; 
+    }
+    .modal {
+      background: #1e1e1e; 
+      padding: 30px; 
+      border-radius: 10px; 
+      max-width: 700px; 
+      width: 90%; 
+      max-height: 90vh; 
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); 
+      font-family: monospace; 
+    }
+    .modal h2 {
+      color:  #39FF14; 
+      font-family: monospace; 
+      font-size: 1.5rem; 
+      margin-bottom: 1.5rem; 
+      border-bottom: 1px solid #39FF14;
+      padding-bottom: 0.5rem; 
+
+    }
+    .modal h3 {
+      color:  #39FF14; 
+      font-family: monospace; 
+      font-size: 1.2rem; 
+      margin-top: 1.5rem; 
+      border-bottom: 0.75px solid #39FF14;
+      /* padding-bottom: 0.5rem;  */
+
+    }
+    .modal h4 {
+      color:  #39FF14; 
+      font-family: monospace; 
+      font-size: 1rem; 
+      margin-top: 1rem; 
+      border-bottom: 0.5rem;
+      /* padding-bottom: 0.5rem;  */
+
+    }
+    .modal p{
+      color: rgba(255, 255, 255, 0.7); 
+      font-family: monospace; 
+      font-size: 0.9rem; 
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      /* padding-bottom: 0.5rem;  */
+
+    }
+    .modal strong{
+      color:  rgb(225, 228, 69); 
+      font-family: monospace; 
+      font-size: 0.9rem; 
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      /* padding-bottom: 0.5rem;  */
+
+    }
+
+    .modal li{
+      color: rgba(255, 255, 255, 0.7); 
+      font-family: monospace; 
+      font-size: 0.9rem; 
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+      /* padding-bottom: 0.5rem;  */
+
+    }
+    .intro-text {
+      position: absolute;
+      top: 30vh;
+      left: 2vw;
+      color: white;
+      font-family: monospace;
+      font-size: clamp(0.5rem, 1vw, 1rem);
+      /* background: rgba(0, 0, 0, 0.5);  */
+      padding: 1vh 1.5vw;
+      border-radius: 1vh;
+      max-width: 15vw;
+      pointer-events: none;
+       /* z-index: 10;  */
+
+      }
+      
+      .intro-text-2 {
+      position: absolute;
+      top: 45vh;
+      left: 2vw;
+      color: white;
+      font-family: monospace;
+      font-size: clamp(0.5rem, 1vw, 1rem);
+      /* background: rgba(0, 0, 0, 0.5);  */
+      padding: 1vh 1.5vw;
+      border-radius: 1vh;
+      max-width: 15vw;
+      pointer-events: none;
+      /* z-index: 10;  */
+      }
+
+      .modal button{
+      background: #333; 
+      color: #fff; 
+      border: none; 
+      padding: 8px 16px; 
+      margin-top: 1rem; 
+      cursor: pointer; 
+      font-family: monospace;
+      border-radius: 4px; 
+    }
+    .modal button:hover{
+      background: #39FF14;
+      color: black;
+    }
+    .qr-code {
+      position: absolute;
+      bottom: 10vh;
+      left: 3vw;
+      width: 20vh;
+      height: 20vh;
+      /* z-index: 10; */
+    }
+    .game-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1080px;
+      height: 540px;
+      background: rgba(0, 0, 0, 1);
+      border: 2px solid #fff;
+      border-radius: 10px;
+      padding: 20px;
+      color: white;
+      font-family: monospace;
+      z-index: 100;
+      display: none;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    .label-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 5px;
+    }
+    .label-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .close-btn {
+      background: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .label-content {
+      display: flex; 
+      gap: 20px;
+/*    font-size: 0.9rem;
+      line-height: 1.4; */
+    }
+    .label-left{
+      flex: 1; 
+    }
+    .label-description{
+      font-size: 14;
+      line-height: 2; 
+      margin-top: 1rem; 
+      margin-bottom: 1rem; 
+      max-width: 30vw;
+    }
+    .label-coords {
+      margin-bottom: 15px;
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .citation-source{
+      margin-bottom: 15px;
+      font-size: 0.6rem;
+      color: rgba(251, 251, 251, 0.6);
+    }
+
+    /* Video Content */
+    .label-video{
+      width: 480px;
+      height: 480px; 
+      background-color: #333333; 
+      display: flex; 
+      align-items: center;
+      justify-content: center; 
+      border-radius: 5px; 
+      overflow: hidden; 
+    }
+
+    .label-video-placeholder{
+      color: #aaa; 
+      font-size: 1rem; 
+    }
+
+    .label-video video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .color-palette {
+      margin-top: 10px; 
+    }
+
+    .color-palette-title{
+      font-size: 0.9rem; 
+      font-weight: lighter;
+      margin-bottom: 10px; 
+      color: #ccc; 
+
+    }
+    
+    .palette-row {
+      display: flex; 
+      align-items: center; 
+      margin-bottom: 3px; 
+    }
+
+    .color-swatch {
+      width: 15px; 
+      height: 15px; 
+      border-radius: 0; 
+      border: 0.75px solid #fff; 
+      margin-right: 8px;
+      margin-bottom: 6px;  
+    }
+    
+    .color-label {
+      font-size: 0.8rem; 
+      color: #ddd; 
+      margin-bottom: 6px;  
+    }
+
+    /* .blur-background{
+      filter: blur(120px) brightness(0.8);
+      transition: filter 0.3s ease
+    } */
+    .overlay{
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background:rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 5; 
+      display: none;
+      pointer-events: auto; 
+    }
+    .globe-blur{
+      filter: blur(8px) brightness(0.7);
+      transition: filter 0.3s ease; 
+    }  
+
+    /* Continent menu */
+    #continentMenu {
+      position: absolute;
+      top: 3vh;
+      right: 2vw;
+      /* z-index: 10; */
+      font-family: monospace;
+      font-size: 1rem;
+      padding: 0.5vh 1vw;
+      border-radius: 0.5vh;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: 1px solid white;
+    }
+
+    /* Resume rotation button */
+    #resumeSpinBtn {
+      position: absolute;
+      bottom: 3vh;
+      right: 2vw;
+      padding: 1vh 1.5vw;
+      font-family: monospace;
+      font-size: 1rem;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: 1px solid white;
+      border-radius: 0.5vh;
+      cursor: pointer;
+      /* z-index: 10; */
+    }
+  </style>
+  <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
+</head>
+
+<body>
+  <div id="globeViz"></div>
+  <div class="overlay" id="overlay"></div>
+  <!-- <div class="blur-region" id="blurRegion"></div> -->
+  <!-- <img class="qr-code" src="global_interactive/assets/GIS Portfolio.jpg" alt="QR Code"> -->
+   <button class="info-button" id="infoBtn">Project Info</button>
+<div class="modal-overlay" id="infoModal">
+    <div class="modal">
+      <h2>Spectral Sounds</h2>
+      <h3>Concept</h3>
+      <p><i>Spectral Sounds</i> reimagines satellite imagery into more ambient, abstracted virtual environments and soundscapes. This project explores how Earth’s spectral changes can engage more than one sense when translated into generative music.</p>
+      <p>This piece lends a tone to visual changes that are not typically audible but are most definitely felt. Motivated by the criticality of climate change, <i>Spectral Sounds</i> reframe how we engage with sweeping environmental changes, making it tangible through sounds and sight. </p>
+
+      <h3>Process</h3>
+      <h4>Data Collection</h4>
+      <p>I sourced satellite imagery from Landsat 8 via the USGS through <strong>Google Earth Engine</strong>. </p>
+      <p>Using the <strong>Tasseled Cap Transformation</strong> technique, I compress the multispectral bands into three axes: brightness, greenness, and wetness using the RGB channels.</p>
+
+      <h4>Video</h4>
+      <p>I used <strong>After Effects</strong> to sequence the imagery retrieved from Google Earth Engine. From here, videos would then be exported for frame-by-frame analysis using the HTML5 and Canvas API script and assigned a set of chords.</p>
+
+      <h4>Sonification</h4>
+      <p>I used <strong>Vibrant.js </strong> to extract the five most dominant colors of each video frame.  Each color was mapped to a designated music note according to its respective hex code.</p>
+      <p>With <strong> Tone.js</strong>, I generated one chord per frame based on these notes, syncing sound to each frame processed from the video.</p>
+      <p>To export the audio track, I used <strong>Tone.js Recorder</strong> and <strong>Lame.js</strong> to save it as a WAV file.</p>
+      <p>Finally, I returned to <strong>After Effects</strong> to synchronize the audio tracks to each original video.</p>
+
+      <h4>Web</h4>
+      <p>The website was built using the big three <strong>(HTML, CSS, and JavaScript)</strong>.</p>
+      <p>I used <strong>Tin Eye Labs</strong> to help extract color palettes of each video for each video legend. </p>
+      <p>This site is hosted on <strong>Github Pages</strong></p>
+      <p>The interactive globe was built using source code from <strong>globe.gl</strong></p>
+      
+
+      <h3>Acknowledgments</h3>
+      <p>I would like to thank my capstone professor, <strong>Victoria Vesna</strong>, and my TA, <strong>Chong Xu</strong>, for their ongoing support and guidance throughout this project. </p>
+      <p>Special thanks to <strong>Laurie McDonald</strong>, <strong>Jonathan Cecil</strong>, and <strong>Gareth Walsh</strong> at the Fab Lab for their help with this installation. </p>
+      <p>Shout-out to my peers for their encouragement and thoughtful critiques. Your insight has strengthened this piece, and for that,  I would like to express my gratitude.</p>
+      <p>Finally, thank you to everyone in my life: family, colleagues, friends, for taking the time to see this project.</p>
+      <p><strong>Thank you</strong>.</p>
+
+      <h3>Works Cited</h3>
+        <li>Amnesty International. “Cambodia’s Prey Lang: How Not to Protect a Vital Forest.” Www.amnesty.org, 13 Apr. 2021, www.amnesty.org/en/latest/news/2021/04/cambodias-prey-lang-how-not-to-protect-a-vital-forest/.</li>
+        <li>BCCIC. “Lake Chad: Adapting to the Climate Crisis.” BCCIC, 27 Jan. 2023, www.bccic.ca/lake-chad-adapting-to-the-climate-crisis/.</li>
+        <li>Hanna, Jason, and Sarah Moon. “PG&E’s Failure to Maintain Transmission Tower Helped Lead to the Deadly Camp Fire, Report Says.” CNN, 3 Dec. 2019, www.cnn.com/2019/12/03/us/pge-transmission-lines-camp-fire.</li>
+        <li>ICLEI Network. “Navigating the Climate Crisis: Insights from Beira, Mozambique – CityTalk.” Iclei.org, June 2024, talkofthecities.iclei.org/navigating-the-climate-crisis-insights-from-beira-mozambique/.</li>
+        <li>Konecky, B. L., et al. “Impacts of Climate Change on Rainfall, Seasonal Flooding, and Evapotranspiration in the Okavango Delta, Botswana.” AGU Fall Meeting Abstracts, vol. 41, 1 Dec. 2016, ui.adsabs.harvard.edu/abs/2016AGUFMGC41B1091K/abstract.</li>
+        <li>Lastrada, Eduardo, et al. “A Decrease in the Regulatory Effect of Snow-Related Phenomena in Spanish Mountain Areas due to Climate Change.” Water, vol. 13, no. 11, 31 May 2021, pp. 1550–1550, www.mdpi.com/2073-4441/13/11/1550, https://doi.org/10.3390/w13111550. Accessed 28 May 2025.</li>
+        <li>Law, Tara. “Australia’s Wildfires and Climate Change Are Making One Another Worse in a Vicious, Devastating Circle.” Time, Time, 7 Jan. 2020, time.com/5759964/australian-bushfires-climate-change/.</li>
+        <li>Maulana, Irfan. “Indonesia Families Evicted for Jakarta PIK2 Project Flooded at Relocation Site.” Mongabay Environmental News, 7 Mar. 2025, news.mongabay.com/2025/03/indonesia-families-evicted-for-jakarta-pik2-project-flooded-at-relocation-site/.</li>
+        <li>Navarro, Andrea, and Krishna Karra. “Mexico City Wealthy’s Favorite Lake Getaway Is Drying Out.” Www.bloomberg.com, 5 June 2024, www.bloomberg.com/news/features/2024-06-05/a-drying-lake-near-mexico-city-showcases-nation-s-water-crisis.</li>
+        <li>Orkhan Huseynli. “Explainer: What Happened to the Aral Sea? | Earth.org.” Earth.org, Earth.org, 16 May 2024, earth.org/the-aral-sea-catastrophe-understanding-one-of-the-worst-ecological-calamities-of-the-last-century/.</li>
+        <li>Parks Canada Agency, Government of Canada. “Columbia Icefield Area and the Athabasca Glacier.” Parks.canada.ca, 23 Oct. 2017, parks.canada.ca/pn-np/ab/jasper/activ/itineraires-itineraries/glacier-athabasca.</li>
+        <li>Portland State University. “Here’s What’s Causing the Great Salt Lake to Shrink.” ScienceDaily, 2025, www.sciencedaily.com/releases/2025/01/250121210512.htm.</li>
+        <li>“Shrinking Great Salt Lake Becoming Source of Heat-Trapping Gas.” Yale E360, 2024, e360.yale.edu/digest/great-salt-lake-carbon-emissions.</li>
+        <li>Torino, Manuel. “Saving the Gran Chaco.” The Nature Conservancy, 9 Dec. 2021, www.nature.org/en-us/what-we-do/our-insights/perspectives/saving-gran-chaco-la-nacion/.</li>
+        <li>U.S. Fish and Wildlife Service. CLIMATE ADAPTATION Marsh Migration and Thin-Layer Placement on Blackwater National Wildlife Refuge. Sept. 2024.</li>
+        <li>Wernberg, Thomas . “Why Nature in Australia’s Southwest Is on the Climate Frontline.” Www.uwa.edu.au, 28 Oct. 2021, www.uwa.edu.au/news/Article/2021/October/Why-nature-in-Australias-southwest-is-on-the-climate-frontline.</li>
+        <li>Yaffa, Joshua. “The Great Siberian Thaw.” The New Yorker, 7 Jan. 2022, www.newyorker.com/magazine/2022/01/17/the-great-siberian-thaw.</li>
+      <button id="closeModalBtn"> Close</button>
+  </div>
+</div>
+
+  <div class="titleTop">Spectral Sounds</div>
+
+  <div class="intro-text">
+    Explore environmental change across the globe through sound and satellite imagery.
+  </div>
+  <div class="intro-text-2">
+    Click each of the markers to see and hear the environmental changes over time.  </div>
+
+  
+  <!-- <div class="info">Learn more here:</div> -->
+  <select id="continentMenu">
+    <option value=""> 📍 Select Continent</option>
+    <option value="Africa">Africa</option>
+    <option value="Asia">Asia</option>
+    <option value="Australia">Australia</option>
+    <option value="Europe">Europe</option>
+    <option value="North America">North America</option>
+    <option value="South America">South America</option>
+    
+    <!--<option value="Antarctica">Antarctica</option>-->
+  </select>
+  <button id="resumeSpinBtn">▶ Rotate Globe</button>
+
+  <!-- Game-style label -->
+  <div class="game-label" id="gameLabel">
+    <div class="label-header">
+      <div class="label-title" id="labelTitle">[Name of Place]</div>
+      <button class="close-btn" id="closeBtn">×</button>
+    </div>
+    <div class="label-content">
+      <div class="label-left">
+        <div class="label-description" id="labelDescription">Description</div>
+        <div class=" citation-source" id="descriptionCitation">Citation</div>     
+        <div class="label-coords" id="labelCoords">[Coords]</div>
+        <div class="color-palette" id="colorPalette">
+    </div>
+    </div>
+  <div class="label-video">
+      <div class="label-video-placeholder"> No video available </div>
+    </div>
+</div>
+  <script type="module">
+    import * as THREE from 'https://esm.sh/three';
+
+    const world = Globe()
+      (document.getElementById('globeViz'))
+      .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
+      .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
+      .showAtmosphere(true)
+      .atmosphereColor('#ffffff')
+      .atmosphereAltitude(0.25);
+
+    world.controls().autoRotate = true;
+    world.controls().autoRotateSpeed = 0.35;
+
+    const CLOUDS_IMG_URL = './clouds.png';
+    const CLOUDS_ALT = 0.004;
+    const CLOUDS_ROTATION_SPEED = -0.006;
+
+    new THREE.TextureLoader().load(CLOUDS_IMG_URL, cloudsTexture => {
+      const clouds = new THREE.Mesh(
+        new THREE.SphereGeometry(world.getGlobeRadius() * (1 + CLOUDS_ALT), 75, 75),
+        new THREE.MeshPhongMaterial({ map: cloudsTexture, transparent: true })
+      );
+      world.scene().add(clouds);
+
+      (function rotateClouds() {
+        clouds.rotation.y += CLOUDS_ROTATION_SPEED * Math.PI / 180;
+        requestAnimationFrame(rotateClouds);
+      })();
+    });
+
+    //Be more specific about the info here
+    const locationInfo = {
+      "Aral Sea, Kazakhstan": {
+      description: "Once the fourth largest lake in the world, now largely dried up due to Soviet irrigation projects. In recent years, this has been exacerbated by the effects of climate change: more intense summers with heatwaves, shorter, colder summers, and more water salinity that impacts biodiversity.",
+      citation: "Earth.org article by Orkhan Huseynli",
+      video: "global_interactive/videos/Aral Sea.mp4",
+      palette: [
+        {color: '#FA5315', label: 'Bare Soil'},
+        {color: '#672FB0', label: 'Water'},
+        {color: '#F3129C', label: 'Sediment'},
+        {color: '#F3E782', label: 'Irrigated Zones / Slight Vegetation'}
+        //{color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Athabasca Glacier": {
+      description: "The shrinking glacier has left a moonscape of rocky moraines in its wake. The Athabasca Glacier has experienced significant glacier recession, increased temperatures and a notable lack of snowfall and snowpack in recent years.",
+      citation: "Parks Canada Agency",
+      video: "global_interactive/videos/Athabasca Glacier.mp4",
+      palette: [
+        {color: '#834626', label: 'Mixed Soil/ Sparse Vegetation'},
+        {color: '#C93113', label: 'Rock'},
+        {color: '#EC08B4', label: 'Snow'}
+        // {color: '#FFFFFF', label: 'Feature'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Beira, Mozambique": {
+      description: "Sea Level rises threaten cities like Biera, Mozambique, a city situated close to the Buzi and Pungwe rivers, resulting in more intense cyclones like Cyclone Idai in 2019.",
+      citation: "ICLEI Network",
+      video: "global_interactive/videos/Beira.mp4",
+      palette: [
+        {color: '#BFBE24', label: 'Vegetation'},
+        {color: '#672FB0', label: 'Water'},
+        {color: '#B0801A', label: 'Moist Soil'},
+        {color: '#99FFFF', label: 'Wetlands'},
+        {color: '#EC08B4', label: 'Clouds'}
+        //{color: '#FFFFFF', label: 'Feature'},
+        ]
+      }, 
+      "Blackwater National Wildlife Refuge, Maryland": {
+      description: "Sea level rise and subsidence are submerging tidal marshes and driving the loss of valuable fish and wildlife habitat, as well as important ecosystem services.",
+      citation: "U.S. Fish and Wildlife Service",
+      video: "global_interactive/videos/Blackwater.mp4",
+      palette: [
+        {color: '#672FB0', label: 'Water'},
+        {color: '#EC08B4', label: 'Clouds'},
+        {color: '#F29E41', label: 'Agricultural Area'},
+        {color: '#CDECA0', label: 'Vegetation'}
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Butte County, CA": {
+        //Fix the line break here 
+      description: "Location of the devastating Camp Fire in 2018, sparked by a transmission error by PG&E. Dry conditions as a result of a years long drought intensified the fire. \n Notice the change of color and sound after 2018",
+      citation: "CNN - Jason Hanna and Sarah Moon",
+      video: "global_interactive/videos/Butte.mp4",
+      palette: [
+        {color: '#67007E', label: 'Water'},
+        {color: '#B103E9', label: 'Vegetation'},
+        {color: '#E702A1', label: 'Dry Soil / Built up Areas'}
+        // {color: '#FFFFFF', label: 'Feature'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Currowan, Australia": {
+      description: "Due to enhanced evaporation due to warmer temperatures, vegetation and soil dry out causing an increased fire risk.",
+      citation: "TIME",
+      video: "global_interactive/videos/Currowan.mp4",
+      palette: [
+        {color: '#4B003A', label: 'Water'},
+        {color: '#9302E4', label: 'Vegetation'},
+        {color: '#F70018', label: 'Clouds'},
+        {color: '#C204E4', label: 'Sparse Vegetation / Bare Soil'}
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Gran Chaco": {
+      description: "South America's second-largest forest after the Amazon, facing rapid deforestation due to the expansion of agriculture.",
+      citation: "The Nature Conservancy - Manuel Torino",
+      video: "global_interactive/videos/Gran Chaco.mp4",
+      palette: [
+        {color: '#98C291', label: 'Vegetation'},
+        {color: '#A6DE82', label: 'Bare Soil'},
+        {color: '#FFd663', label: 'Cleared / Built up Areas'},
+        {color: '#4B003A', label: 'Water'}
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Great Salt Lake": {
+      description: "The largest saltwater lake in the Western Hemisphere, shrinking due to water diversions and drought. Losing  73 percent of its water, the lake is releasing climate-warming emissions.",
+      citation: "Yale Environment 360 | Science Daily",
+      video: "global_interactive/videos/Great Salt Lake.mp4",
+      palette: [
+        {color: '#A00110', label: 'Bare Soil'},
+        {color: '#4B003A', label: 'Water'},
+        {color: '#E600F4', label: 'Dried up Saline'}
+        // {color: '#FFFFFF', label: 'Feature'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Gredos Mountains, Spain": {
+      description: "Mountain range in central Spain have been affected by raising temperatures that have resulted in decreased snowball and faster melt.",
+      citation: "Lastrada et al. - MDPI",
+      video: "global_interactive/videos/Gredos Mountains.mp4",
+      palette: [
+        {color: '#EBB70B', label: 'Agricultural Areas'},
+        {color: '#CFE037', label: 'Sparse Vegetation'},
+        {color: '#B4DD5B', label: 'Dense Vegetation'},
+        // {color: '#FFFFFF', label: 'Feature'},
+        {color: '#4B003A', label: 'Water'}
+        ]
+      }, 
+            //Source: The University of West Austrailia
+      "Kalbarri National Park, Western Australia": {
+      description: "Since 1970, winter rainfall has declined up to 20%, river flows have plummeted and heatwaves spanning water and land have intensified.",
+      citation: "The University of Western Australia - Thomas Wernberg",
+      video: "global_interactive/videos/Kalbarri.mp4",
+      palette: [
+        {color: '#E58702', label: 'Bare Soil'},
+        {color: '#E4DB27', label: 'Agricultural Areas'},
+        {color: '#4B003A', label: 'Water'},
+        {color: '#98AC57', label: 'Vegetation'}
+        //{color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Kohod, Jakarta": {
+      description: "Rainfall in Indonesia is projected to increase by 10 percent in the following decades. This would result in more extreme weather events.",
+      citation: "Mongabay - Irfan Maulana",
+      video: "global_interactive/videos/Kohod.mp4",
+      palette: [
+        {color: '#4B003A', label: 'Water'},
+        {color: '#F70018', label: 'Clouds'},
+        {color: '#BFE960', label: 'Vegetation'},
+        {color: '#CE8E3C', label: 'Built up Areas'},
+        {color: '#D2C039', label: 'Bare Soil'}
+        ]
+      }, 
+      "Lake Chad, Chad": {
+      description: "Straddling the borders of Niger, Chad, Nigeria, and Cameroon, Lake Chad has decreased due to rising temperatures, unpredictable rainfall, desertification, heat waves, and floods.",
+      citation: "BCCIC",
+      video: "global_interactive/videos/Lake Chad.mp4",
+      palette: [
+        {color: '#800307', label: 'Bare Soil'},
+        {color: '#2206DD', label: 'Water'},
+        {color: '#D40380', label: 'Wetlands'}
+        // {color: '#FFFFFF', label: 'Feature'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Okavango Delta, Botswana": {
+      description: "The inland delta is what people in Northern Botswana rely on supplements the short and variable rainy season but is often not enough to alleviate drought. An rise in temperatures also shrinks the amount of water that meets the delta increasing evaporation from soils and rivers.",
+      citation: "Konecky, B. L., et al. - Harvard University",
+      video: "global_interactive/videos/Okavango.mp4",
+      palette: [
+        {color: '#FAA803', label: 'Sparse Vegetation'},
+        {color: '#F97704', label: 'Dense Vegetation'},
+        {color: '#B2DF54', label: 'Wetlands'},
+        {color: '#2206DD', label: 'Water'},
+         {color: '#F70018', label: 'Clouds'}
+        ]
+      }, 
+      "Prey Lang Forest, Cambodia": {
+      description: "One of the largest lowland rainforests in Cambodia, the Prey Lang Forest is threatened by deforestation as a result of aggresive logging practices.",
+      citation: "Amnesty International",
+      video: "global_interactive/videos/Prey Lang Forest.mp4",
+      palette: [
+        {color: '#5D0413', label: 'Water'},
+        {color: '#E408B2', label: 'Sparse Vegetation'},
+        {color: '#C000E3', label: 'Dense Vegetation'}
+        // {color: '#FFFFFF', label: 'Feature'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Valle de Bravo, State of Mexico": {
+      description: "A reservoir area surrounded by mountains and popular for outdoor activities is water levels is decreasing due to the effects of climate change, population growth, and outdated water management infrastructure.",
+      citation: "Bloomberg | Andrea Navarro and Krishna Karra",
+      video: "global_interactive/videos/Valle de Bravo.mp4",
+            palette: [
+        {color: '#4B003A', label: 'Water'},
+        {color: '#F70018', label: 'Clouds'},
+        {color: '#ABDE58', label: 'Vegetation'},
+        {color: '#DC9D0C', label: 'Built up areas'}
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }, 
+      "Yakutia, Russia": {
+      description: "Region in Siberia experiencing extreme temperature fluctuation causing deforestation and wildfire.  Thawing permafrost microbes in the soil awaken and begin to feast on the defrosting biomass.",
+      citation: "The New Yorker - Joshua Yaffa",
+      video: "global_interactive/videos/Yakutia.mp4",
+      palette: [
+        {color: '#4B003A', label: 'Water'},
+        {color: '#F70018', label: 'Clouds'},
+        {color: '#ABDE58', label: 'Vegetation'},
+        {color: '#A38A58', label: 'Bare Soil'},
+        // {color: '#FFFFFF', label: 'Feature'}
+        ]
+      }
+    };
+
+    const markers = [
+      { name: "Aral Sea, Kazakhstan", lat: 45, lng: 60, color: "#39FF14" },
+      { name: "Athabasca Glacier", lat: 52.2, lng: -117.25, color: "#39FF14" },
+      { name: "Beira, Mozambique", lat: -19.8, lng: 34.9, color: "#39FF14" },
+      { name: "Blackwater National Wildlife Refuge, Maryland", lat: 38.33, lng: -76.08, color: "#39FF14" },
+      { name: "Butte County, CA", lat: 39.67, lng: -121.6, color: "#39FF14" },
+      { name: "Currowan, Australia", lat: -35.5, lng: 150.2, color: "#39FF14" },
+      { name: "Gran Chaco", lat: -23, lng: -61, color: "#39FF14" },
+      { name: "Great Salt Lake", lat: 41.1, lng: -112.4, color: "#39FF14" },
+      { name: "Gredos Mountains, Spain", lat: 40.25, lng: -5.25, color: "#39FF14" },
+      { name: "Kalbarri National Park, Western Australia", lat: -28, lng: 114, color: "#39FF14" },
+      { name: "Kohod, Jakarta", lat: -6.2, lng: 106.8, color: "#39FF14" },
+      { name: "Lake Chad, Chad", lat: 13, lng: 14, color: "#39FF14" },
+      { name: "Okavango Delta, Botswana", lat: -19.3, lng: 22.9, color: "#39FF14" },
+      { name: "Prey Lang Forest, Cambodia", lat: 12.7, lng: 105.1, color: "#39FF14" },
+      { name: "Valle de Bravo, State of Mexico", lat: 19.2, lng: -100.1, color: "#39FF14" },
+      { name: "Yakutia, Russia", lat: 66.4, lng: 129.1, color: "#39FF14" }
+    ];
+
+    let pulseTime = 0;
+    const pulseSpeed = 0.05;
+    const minRadius = 1;
+    const maxRadius = 1.75;
+
+    function getPulseRadius(d) {
+      const phase = (d.lat + d.lng) * 0.1;
+      return minRadius + (maxRadius - minRadius) * (0.5 + 0.5 * Math.sin(pulseTime + phase));
+    }
+
+    // const gameLabel = document.getElementById('gameLabel');
+    // // const labelTitle = document.getElementById('labelTitle');
+    // // const labelContent = document.getElementById('labelContent');
+    // // const labelCoords = document.getElementById('labelCoords');
+    // const closeBtn = document.getElementById('closeBtn');
+    // const overlay = document.getElementById('overlay');
+
+    // const colorPalette = document.getElementById('colorPalette');
+
+    // closeBtn.addEventListener('click', () => {
+    //   gameLabel.style.display = 'none';
+    // });
+
+    //PALETTE 
+    function updateColorPalette(palette){
+      colorPalette.innerHTML= `
+      <div class="color-palette-title">LEGEND</div>
+      ${palette.map(item => `
+      <div class="palette-row">
+        <div class="color-swatch" style="background-color: ${item.color}"></div>
+        <div class="color-label">${item.label}</div>
+      </div>
+      `).join('')}
+    `;
+    }
+    const gameLabel = document.getElementById('gameLabel');
+    const closeBtn = document.getElementById('closeBtn');
+    const overlay = document.getElementById('overlay');
+    const colorPalette = document.getElementById('colorPalette');
+
+    let currentVideo = null; 
+
+    function closeLabel(){
+      gameLabel.style.display = 'none';
+      overlay.style.display = 'none';
+      document.getElementById('globeViz').classList.remove('globe-blur');
+      //PAUSE VIDEO WHEN CLOSED
+      const videos = document.querySelectorAll('.label-video video');
+      videos.forEach(video => video.pause()); 
+      //classList.remove('blur-background')
+    }
+
+    closeBtn.addEventListener('click', closeLabel); 
+    overlay.addEventListener('click', closeLabel);
+
+    world
+      .pointsData(markers)
+      .pointColor(d => d.color)
+      .pointAltitude(0.01)
+      .pointRadius(d => getPulseRadius(d))
+      .onPointClick(point => {
+        if (!point) return;
+        const location = locationInfo[point.name]; 
+
+        //LABEL DETAILS
+        document.getElementById('labelTitle').textContent = point.name; 
+        document.getElementById('labelDescription').textContent = location.description; 
+        document.getElementById('labelCoords').textContent = `Lat: ${point.lat.toFixed(2)}°, Lng: ${point.lng.toFixed(2)}°`; 
+        document.getElementById('descriptionCitation').textContent = location.citation || ''; 
+
+      //UPDATE VIDEO
+      const videoContainer = document.querySelector('.label-video');
+      videoContainer.innerHTML = ''; 
+
+      if(location.video) {
+        const video = document.createElement('video'); 
+        video.src = location.video; 
+        video.controls = true; 
+        video.muted = true; //FOR BROWSER AUTOPLAY;
+        video.autoplay = true; 
+        video.style.width = '100%';
+        video.style.height = '100%';
+        videoContainer.appendChild(video); 
+      }else{
+        videoContainer.innerHTML = '<div class="label-video-placeholder"> No video available </div>';
+      }
+
+
+        updateColorPalette(location.palette); 
+        gameLabel.style.display = 'block';
+        overlay.style.display = 'block';
+        document.getElementById('globeViz').classList.add('blur-background')
+
+        // labelTitle.textContent = point.name;
+        // labelContent.textContent = locationInfo[point.name];
+        // labelCoords.textContent = `Lat: ${point.lat.toFixed(2)}°, Lng: ${point.lng.toFixed(2)}°`;
+        // gameLabel.style.display = 'block';
+      });
+
+    function animate() {
+      pulseTime += pulseSpeed;
+      world.pointsData(markers.map(d => ({ ...d, radius: getPulseRadius(d) })));
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // document.addEventListener('click', (e) => {
+    //   if (!gameLabel.contains(e.target)) {
+    //     gameLabel.style.display = 'none';
+    //   }
+    // });
+
+    function createStarfield() {
+      const geometry = new THREE.BufferGeometry();
+      const material = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.1,
+        transparent: true,
+        opacity: 0.8
+      });
+      const vertices = [];
+      for (let i = 0; i < 10000; i++) {
+        vertices.push((Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000, (Math.random() - 0.5) * 2000);
+      }
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      world.scene().add(new THREE.Points(geometry, material));
+    }
+    createStarfield();
+
+    const continents = {
+      "Africa": { lat: 0, lng: 20 },
+      "Asia": { lat: 30, lng: 100 },
+      "Europe": { lat: 54, lng: 15 },
+      "North America": { lat: 40, lng: -100 },
+      "South America": { lat: -15, lng: -60 },
+      "Australia": { lat: -25, lng: 135 }
+      //"Antarctica": { lat: -80, lng: 0 }
+    };
+
+    document.getElementById('continentMenu').addEventListener('change', (e) => {
+      const selection = e.target.value;
+      if (selection && continents[selection]) {
+        const { lat, lng } = continents[selection];
+        world.pointOfView({ lat, lng, altitude: 2 }, 2000);
+        world.controls().autoRotate = false;
+      }
+    });
+
+    document.getElementById('resumeSpinBtn').addEventListener('click', () => {
+      world.controls().autoRotate = true;
+    });
+
+    const infoBtn = document.getElementById('infoBtn');
+    const infoModal = document.getElementById('infoModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    infoBtn.addEventListener('click', () => {
+      infoModal.style.display = 'flex'; 
+      document.getElementById('globeViz').classList.remove('globe-blur');
+
+    })
+
+    closeModalBtn.addEventListener('click', () => {
+      infoModal.style.display = 'none'; 
+      document.getElementById('globeViz').classList.remove('globe-blur')
+    })
+
+    infoModal.addEventListener('click', (e) => {
+      if (e.target === infoModal){
+        infoModal.style.display = 'none'; 
+        document.getElementById('globeViz').classList.remove('globe-blur')
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+  <!-- <div class="modal-overlay" id="infoModal">
+    <div class="modal">
+      <h2>Spectral Sounds</h2>
+      <h3>Concept</h3>
+      <p>“Spectral Sounds” reimagines satellite imagery into more ambient, abstracted virtual environments and soundscapes. This project explores how Earth’s spectral changes can engage more than one sense when translated into generative music.</p>
+      <p>This piece lends a tone to visual changes that are not typically audible but are most definitely felt. Motivated by the criticality of climate change, Spectral Sounds reframe how we engage with sweeping environmental changes, making it tangible through sounds and sight. </p>
+
+      <h3>Process</h3>
+      <h4>Data Collection</h4>
+      <p>I sourced satellite imagery from Landsat 8 via the USGS through Google Earth Engine. </p>
+      <p>Using the Tassled Cap Transformation technique, I compress the multispectral bands into three axes: brightness, greenness, and wetness using the RGB channels.</p>
+
+      <h4>Video</h4>
+      <p>I used After Effects to sequence the imagery retrieved from Google Earth Engine. From here, videos would then be exported for frame-by-frame analysis using the HTML5 and Canvas API script and assigned a set of chords.</p>
+
+      <h4>Sonification</h4>
+      <p>I used Vibrant.js to extract the five most dominant colors of each video frame.  Each color was mapped to a designated music note according to its respective hex code.</p>
+      <p>With  Tone.js, I generated one chord per frame based on these notes, syncing sound to each frame processed from the video.</p>
+      <p>To export the audio track, I used Tone.js Recorder and Lame.js to save it as a WAV file.</p>
+      <p>Finally, I returned to After Effects to synchronize the audio tracks to each original video.</p>
+
+      <h4>Web</h4>
+      <p>The website was built using the big three (HTML, CSS, and JavaScript).</p>
+      <p>I used TinEye to help extract color palettes of each video for each video legend. </p>
+      <p>This site is hosted on Github Pages</p>
+      <p>The interactive globe was built using source code from globe.gl</p>
+      
+
+      <h3>Acknowledgments</h3>
+      <p>I would like to thank my capstone professor, Victoria Vesna, and my TA, Chong Xu, for their ongoing support and guidance throughout this project. </p>
+      <p>Special thanks to Laurie McDonald, Jonathan Cecil, and Gareth Walsh at the Fab Lab for their help with this installation. </p>
+      <p>Shout-out to my peers for their encouragement and thoughtful critiques. Your insight has strengthened this piece, and for that,  I would like to express my gratitude.</p>
+      <p>Finally, thank you to everyone in my life: family, colleagues, friends, for taking the time to see this project.</p>
+      <p>Thank you.</p>
+      <button id="closeModalBtn"> Close</button>
+  </div>
+</div> -->
