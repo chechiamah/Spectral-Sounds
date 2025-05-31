@@ -355,11 +355,36 @@
       filter: blur(8px) brightness(0.7);
       transition: filter 0.3s ease; 
     }  
-
+    .legend {
+      position: absolute; 
+      top: 10vh; 
+      right: 2vw; 
+      color: white; 
+      font-family: monospace; 
+      padding: 10px; 
+      width: 140px; 
+    }
+    .legend-title{
+      font-size: 0.9rem; 
+      margin-bottom: 8px; 
+      color: white; 
+      padding-bottom: 4px;
+    }
+    .legend-item{
+      display: flex; 
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: 0.8rem;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+    }
     /* Continent menu */
     #continentMenu {
       position: absolute;
-      top: 3vh;
+      top: 16vh;
       right: 2vw;
       /* z-index: 10; */
       font-family: monospace;
@@ -477,9 +502,21 @@
     <option value="Europe">Europe</option>
     <option value="North America">North America</option>
     <option value="South America">South America</option>
-    
     <!--<option value="Antarctica">Antarctica</option>-->
-  </select>
+</select>
+  
+<div class="legend">
+  <div class="legend-title">MARKER KEY</div>
+  <div class="legend-item">
+    <div class="legend-color" style="background-color: #39FF14;"></div>
+    <div>2015-2024 Impacts</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-color" style="background-color: #EE4B2B;"></div>
+    <div>2025 Events</div>
+  </div>
+</div>
+  
   <button id="resumeSpinBtn">▶ Rotate Globe</button>
 
   <!-- Game-style label -->
