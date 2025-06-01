@@ -79,8 +79,6 @@
       align-items: center; 
       z-index: 999; 
       font-family: monospace; 
-      padding: 20px; 
-      box-sizing: border-box; 
     }
     .modal {
       background: #1e1e1e; 
@@ -214,10 +212,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 1080px; 
-      height: auto;
-      max-height: 90vh; 
+      width: 1080px;
+      height: 540px;
       background: rgba(0, 0, 0, 1);
       border: 2px solid #fff;
       border-radius: 10px;
@@ -227,7 +223,6 @@
       z-index: 100;
       display: none;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-      overflow-y: auto; 
     }
     .label-header {
       display: flex;
@@ -265,11 +260,11 @@
       flex: 1; 
     }
     .label-description{
-      font-size: 14px;
+      font-size: 14;
       line-height: 2; 
       margin-top: 1rem; 
       margin-bottom: 1rem; 
-      max-width: 100%;
+      max-width: 30vw;
     }
     .label-coords {
       margin-bottom: 15px;
@@ -285,16 +280,14 @@
 
     /* Video Content */
     .label-video{
-      width: 1080px;
-      height: auto; 
-      aspect-ratio: 1/1;
+      width: 480px;
+      height: 480px; 
       background-color: #333333; 
       display: flex; 
       align-items: center;
       justify-content: center; 
       border-radius: 5px; 
       overflow: hidden; 
-      margin-top: 20px; 
     }
 
     .label-video-placeholder{
@@ -417,111 +410,6 @@
       border-radius: 0.5vh;
       cursor: pointer;
       /* z-index: 10; */
-    }
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      .modal {
-        padding: 15px;
-      }
-      
-      .modal h2 {
-        font-size: 1.3rem;
-      }
-      
-      .modal h3 {
-        font-size: 1.1rem;
-      }
-      
-      .modal p, .modal li {
-        font-size: 0.85rem;
-      }
-      .game-label {
-        padding: 15px;
-      }
-    
-      .label-title {
-        font-size: 1rem;
-      }
-    
-      .label-description {
-        font-size: 0.8rem;
-        line-height: 1.6;
-      }
-    
-      .label-coords, .citation-source {
-        font-size: 0.7rem;
-      }
-    
-      .color-palette-title {
-        font-size: 0.8rem;
-      }
-    
-      .color-label {
-        font-size: 0.7rem;
-      }
-      .titleTop, .titleBottom {
-        max-width: 25vw;
-      }
-      .intro-text, .intro-text-2 {
-        max-width: 25vw;
-      }
-    }
-    @media (max-width: 480px) {
-      .modal {
-        padding: 10px;
-      }
-      
-      .modal h2 {
-        font-size: 1.1rem;
-      }
-      
-      .modal h3 {
-        font-size: 1rem;
-      }
-      
-      .modal p, .modal li {
-        font-size: 0.8rem;
-        line-height: 1.4;
-      }
-      .game-label {
-        width: 95%;
-        padding: 10px;
-      }
-      
-      .label-header {
-        margin-bottom: 5px;
-      }
-      
-      .close-btn {
-        width: 20px;
-        height: 20px;
-        font-size: 0.8rem;
-      }
-      
-      .label-description {
-        font-size: 0.75rem;
-        margin: 0.5rem 0;
-      }
-      .label-content {
-        flex-direction: column;
-      }
-      .titleTop, .titleBottom {
-        max-width: 35vw;
-        font-size: clamp(1.5rem, 5vw, 3rem);
-      }
-      .intro-text, .intro-text-2 {
-        max-width: 35vw;
-        font-size: clamp(0.5rem, 1.2vw, 0.8rem);
-      }
-      #continentMenu, #resumeSpinBtn {
-        font-size: 0.8rem;
-        padding: 0.5vh 1vw;
-      }
-      .legend {
-        width: 120px;
-      /* z-index: 10; */
-        font-size: 0.7rem;
-      }
     }
   </style>
   <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
