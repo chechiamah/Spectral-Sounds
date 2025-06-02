@@ -27,6 +27,7 @@
       height: 100vh;
       cursor: pointer;
       transition: filter 0.3s ease;
+      z-index: 1; 
     }
 
     /* Text Elements */
@@ -39,6 +40,7 @@
       border-radius: 1vh;
       max-width: 90%;
       left: 2vw;
+      z-index: 10; 
     }
 
     .titleTop {
@@ -73,7 +75,7 @@
       border: 1px solid var(--text-color);
       border-radius: 0.5vh;
       cursor: pointer;
-      z-index: 10;
+      z-index: 10; /* Above globe */
       font-size: clamp(0.8rem, 2vw, 1rem);
     }
 
@@ -99,7 +101,7 @@
       background: var(--background-color);
       color: var(--text-color);
       border: 1px solid var(--text-color);
-      z-index: 10;
+      z-index: 10; 
     }
 
     /* Legend */
@@ -113,6 +115,7 @@
       background: var(--background-color);
       border-radius: 5px;
       width: clamp(120px, 15vw, 160px);
+      z-index: 10;
     }
 
     .legend-title {
@@ -146,7 +149,7 @@
       display: none; 
       justify-content: center; 
       align-items: center; 
-      z-index: 999; 
+      z-index: 1000; 
       font-family: var(--font-main); 
     }
 
@@ -234,7 +237,7 @@
       padding: 15px;
       color: white;
       font-family: var(--font-main);
-      z-index: 100;
+      z-index: 1001; 
       display: none;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
       overflow: auto;
@@ -380,7 +383,7 @@
       background:rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 5; 
+      z-index: 999; 
       display: none;
       pointer-events: auto; 
     }
@@ -449,14 +452,14 @@
 <body>
   <div id="globeViz"></div>
   <div class="overlay" id="overlay"></div>
-  <!-- <div class="blur-region" id="blurRegion"></div> -->
-  <!-- <img class="qr-code" src="global_interactive/assets/GIS Portfolio.jpg" alt="QR Code"> -->
-   <button class="info-button" id="infoBtn">Project Info</button>
-<div class="modal-overlay" id="infoModal">
+  
+  <button class="info-button control-button" id="infoBtn">Project Info</button>
+  
+  <div class="modal-overlay" id="infoModal">
     <div class="modal">
       <h2>Spectral Sounds</h2>
       <h3>Concept</h3>
-      <p><i>Spectral Sounds</i> reimagines satellite imagery into more ambient, abstracted virtual environments and soundscapes. This project explores how Earth’s spectral changes can engage more than one sense when translated into generative music.</p>
+      <p><i>Spectral Sounds</i> reimagines satellite imagery into more ambient, abstracted virtual environments and soundscapes. This project explores how Earth's spectral changes can engage more than one sense when translated into generative music.</p>
       <p>This piece lends a tone to visual changes that are not typically audible but are most definitely felt. Motivated by the criticality of climate change, <i>Spectral Sounds</i> reframe how we engage with sweeping environmental changes, making it tangible through sounds and sight. </p>
 
       <h3>Process</h3>
@@ -479,7 +482,6 @@
       <p>This site is hosted on <strong>Github Pages</strong></p>
       <p>The interactive globe was built using source code from <strong>globe.gl</strong></p>
       
-
       <h3>Acknowledgments</h3>
       <p>I would like to thank my capstone professor, <strong>Victoria Vesna</strong>, and my TA, <strong>Chong Xu</strong>, for their ongoing support and guidance throughout this project. </p>
       <p>Special thanks to <strong>Laurie McDonald</strong>, <strong>Jonathan Cecil</strong>, and <strong>Gareth Walsh</strong> at the Fab Lab for their help with this installation. </p>
@@ -494,39 +496,38 @@
       <p>Portfolio: <a href="https://arcg.is/1TKjPe0" target="_blank">https://arcg.is/1TKjPe0</a></p>
 
       <h3>Works Cited</h3>
-        <li>Amnesty International. “Cambodia’s Prey Lang: How Not to Protect a Vital Forest.” Www.amnesty.org, 13 Apr. 2021, www.amnesty.org/en/latest/news/2021/04/cambodias-prey-lang-how-not-to-protect-a-vital-forest/.</li>
-        <li>BCCIC. “Lake Chad: Adapting to the Climate Crisis.” BCCIC, 27 Jan. 2023, www.bccic.ca/lake-chad-adapting-to-the-climate-crisis/.</li>
-        <li>Dieckman, Emily. “How Much Did Climate Change Affect the Los Angeles Wildfires?” Eos, 28 Jan. 2025, eos.org/articles/how-much-did-climate-change-affect-the-los-angeles-wildfires.</li>
-        <li>Foulkes, Imogen. “Swiss Glacier Collapse Buries Most of Village of Blatten.” BBC, 28 May 2025, www.bbc.com/news/articles/cnv1evn2p2vo.</li>
-        <li>Hanna, Jason, and Sarah Moon. “PG&E’s Failure to Maintain Transmission Tower Helped Lead to the Deadly Camp Fire, Report Says.” CNN, 3 Dec. 2019, www.cnn.com/2019/12/03/us/pge-transmission-lines-camp-fire.</li>
-        <li>ICLEI Network. “Navigating the Climate Crisis: Insights from Beira, Mozambique – CityTalk.” Iclei.org, June 2024, talkofthecities.iclei.org/navigating-the-climate-crisis-insights-from-beira-mozambique/.</li>
-        <li>Konecky, B. L., et al. “Impacts of Climate Change on Rainfall, Seasonal Flooding, and Evapotranspiration in the Okavango Delta, Botswana.” AGU Fall Meeting Abstracts, vol. 41, 1 Dec. 2016, ui.adsabs.harvard.edu/abs/2016AGUFMGC41B1091K/abstract.</li>
-        <li>Lastrada, Eduardo, et al. “A Decrease in the Regulatory Effect of Snow-Related Phenomena in Spanish Mountain Areas due to Climate Change.” Water, vol. 13, no. 11, 31 May 2021, pp. 1550–1550, www.mdpi.com/2073-4441/13/11/1550, https://doi.org/10.3390/w13111550. Accessed 28 May 2025.</li>
-        <li>Law, Tara. “Australia’s Wildfires and Climate Change Are Making One Another Worse in a Vicious, Devastating Circle.” Time, Time, 7 Jan. 2020, time.com/5759964/australian-bushfires-climate-change/.</li>
-        <li>Maulana, Irfan. “Indonesia Families Evicted for Jakarta PIK2 Project Flooded at Relocation Site.” Mongabay Environmental News, 7 Mar. 2025, news.mongabay.com/2025/03/indonesia-families-evicted-for-jakarta-pik2-project-flooded-at-relocation-site/.</li>
-        <li>Navarro, Andrea, and Krishna Karra. “Mexico City Wealthy’s Favorite Lake Getaway Is Drying Out.” Www.bloomberg.com, 5 June 2024, www.bloomberg.com/news/features/2024-06-05/a-drying-lake-near-mexico-city-showcases-nation-s-water-crisis.</li>
-        <li>Orkhan Huseynli. “Explainer: What Happened to the Aral Sea? | Earth.org.” Earth.org, Earth.org, 16 May 2024, earth.org/the-aral-sea-catastrophe-understanding-one-of-the-worst-ecological-calamities-of-the-last-century/.</li>
-        <li>Parks Canada Agency, Government of Canada. “Columbia Icefield Area and the Athabasca Glacier.” Parks.canada.ca, 23 Oct. 2017, parks.canada.ca/pn-np/ab/jasper/activ/itineraires-itineraries/glacier-athabasca.</li>
-        <li>Portland State University. “Here’s What’s Causing the Great Salt Lake to Shrink.” ScienceDaily, 2025, www.sciencedaily.com/releases/2025/01/250121210512.htm.</li>
-        <li>“Shrinking Great Salt Lake Becoming Source of Heat-Trapping Gas.” Yale E360, 2024, e360.yale.edu/digest/great-salt-lake-carbon-emissions.</li>
-        <li>Torino, Manuel. “Saving the Gran Chaco.” The Nature Conservancy, 9 Dec. 2021, www.nature.org/en-us/what-we-do/our-insights/perspectives/saving-gran-chaco-la-nacion/.</li>
+        <li>Amnesty International. "Cambodia's Prey Lang: How Not to Protect a Vital Forest." Www.amnesty.org, 13 Apr. 2021, www.amnesty.org/en/latest/news/2021/04/cambodias-prey-lang-how-not-to-protect-a-vital-forest/.</li>
+        <li>BCCIC. "Lake Chad: Adapting to the Climate Crisis." BCCIC, 27 Jan. 2023, www.bccic.ca/lake-chad-adapting-to-the-climate-crisis/.</li>
+        <li>Dieckman, Emily. "How Much Did Climate Change Affect the Los Angeles Wildfires?" Eos, 28 Jan. 2025, eos.org/articles/how-much-did-climate-change-affect-the-los-angeles-wildfires.</li>
+        <li>Foulkes, Imogen. "Swiss Glacier Collapse Buries Most of Village of Blatten." BBC, 28 May 2025, www.bbc.com/news/articles/cnv1evn2p2vo.</li>
+        <li>Hanna, Jason, and Sarah Moon. "PG&E's Failure to Maintain Transmission Tower Helped Lead to the Deadly Camp Fire, Report Says." CNN, 3 Dec. 2019, www.cnn.com/2019/12/03/us/pge-transmission-lines-camp-fire.</li>
+        <li>ICLEI Network. "Navigating the Climate Crisis: Insights from Beira, Mozambique – CityTalk." Iclei.org, June 2024, talkofthecities.iclei.org/navigating-the-climate-crisis-insights-from-beira-mozambique/.</li>
+        <li>Konecky, B. L., et al. "Impacts of Climate Change on Rainfall, Seasonal Flooding, and Evapotranspiration in the Okavango Delta, Botswana." AGU Fall Meeting Abstracts, vol. 41, 1 Dec. 2016, ui.adsabs.harvard.edu/abs/2016AGUFMGC41B1091K/abstract.</li>
+        <li>Lastrada, Eduardo, et al. "A Decrease in the Regulatory Effect of Snow-Related Phenomena in Spanish Mountain Areas due to Climate Change." Water, vol. 13, no. 11, 31 May 2021, pp. 1550–1550, www.mdpi.com/2073-4441/13/11/1550, https://doi.org/10.3390/w13111550. Accessed 28 May 2025.</li>
+        <li>Law, Tara. "Australia's Wildfires and Climate Change Are Making One Another Worse in a Vicious, Devastating Circle." Time, Time, 7 Jan. 2020, time.com/5759964/australian-bushfires-climate-change/.</li>
+        <li>Maulana, Irfan. "Indonesia Families Evicted for Jakarta PIK2 Project Flooded at Relocation Site." Mongabay Environmental News, 7 Mar. 2025, news.mongabay.com/2025/03/indonesia-families-evicted-for-jakarta-pik2-project-flooded-at-relocation-site/.</li>
+        <li>Navarro, Andrea, and Krishna Karra. "Mexico City Wealthy's Favorite Lake Getaway Is Drying Out." Www.bloomberg.com, 5 June 2024, www.bloomberg.com/news/features/2024-06-05/a-drying-lake-near-mexico-city-showcases-nation-s-water-crisis.</li>
+        <li>Orkhan Huseynli. "Explainer: What Happened to the Aral Sea? | Earth.org." Earth.org, Earth.org, 16 May 2024, earth.org/the-aral-sea-catastrophe-understanding-one-of-the-worst-ecological-calamities-of-the-last-century/.</li>
+        <li>Parks Canada Agency, Government of Canada. "Columbia Icefield Area and the Athabasca Glacier." Parks.canada.ca, 23 Oct. 2017, parks.canada.ca/pn-np/ab/jasper/activ/itineraires-itineraries/glacier-athabasca.</li>
+        <li>Portland State University. "Here's What's Causing the Great Salt Lake to Shrink." ScienceDaily, 2025, www.sciencedaily.com/releases/2025/01/250121210512.htm.</li>
+        <li>"Shrinking Great Salt Lake Becoming Source of Heat-Trapping Gas." Yale E360, 2024, e360.yale.edu/digest/great-salt-lake-carbon-emissions.</li>
+        <li>Torino, Manuel. "Saving the Gran Chaco." The Nature Conservancy, 9 Dec. 2021, www.nature.org/en-us/what-we-do/our-insights/perspectives/saving-gran-chaco-la-nacion/.</li>
         <li>U.S. Fish and Wildlife Service. CLIMATE ADAPTATION Marsh Migration and Thin-Layer Placement on Blackwater National Wildlife Refuge. Sept. 2024.</li>
-        <li>Wernberg, Thomas . “Why Nature in Australia’s Southwest Is on the Climate Frontline.” Www.uwa.edu.au, 28 Oct. 2021, www.uwa.edu.au/news/Article/2021/October/Why-nature-in-Australias-southwest-is-on-the-climate-frontline.</li>
-        <li>Yaffa, Joshua. “The Great Siberian Thaw.” The New Yorker, 7 Jan. 2022, www.newyorker.com/magazine/2022/01/17/the-great-siberian-thaw.</li>
+        <li>Wernberg, Thomas . "Why Nature in Australia's Southwest Is on the Climate Frontline." Www.uwa.edu.au, 28 Oct. 2021, www.uwa.edu.au/news/Article/2021/October/Why-nature-in-Australias-southwest-is-on-the-climate-frontline.</li>
+        <li>Yaffa, Joshua. "The Great Siberian Thaw." The New Yorker, 7 Jan. 2022, www.newyorker.com/magazine/2022/01/17/the-great-siberian-thaw.</li>
       <button id="closeModalBtn"> Close</button>
   </div>
 </div>
 
-  <div class="titleTop">Spectral Sounds</div>
+  <div class="text-element titleTop">Spectral Sounds</div>
 
-  <div class="intro-text">
+  <div class="text-element intro-text">
     Explore environmental change across the globe through sound and satellite imagery.
   </div>
-  <div class="intro-text-2">
-    Click each of the markers to see and hear the environmental changes over time.  </div>
+  <div class="text-element intro-text-2">
+    Click each of the markers to see and hear the environmental changes over time.  
+  </div>
 
-  
-  <!-- <div class="info">Learn more here:</div> -->
   <select id="continentMenu">
     <option value=""> 📍 Select Continent</option>
     <option value="Africa">Africa</option>
@@ -535,22 +536,21 @@
     <option value="Europe">Europe</option>
     <option value="North America">North America</option>
     <option value="South America">South America</option>
-    <!--<option value="Antarctica">Antarctica</option>-->
-</select>
+  </select>
   
-<div class="legend">
-  <div class="legend-title">MARKER KEY</div>
-  <div class="legend-item">
-    <div class="legend-color" style="background-color: #39FF14;"></div>
-    <div>2015-2024 Impacts</div>
+  <div class="legend">
+    <div class="legend-title">MARKER KEY</div>
+    <div class="legend-item">
+      <div class="legend-color" style="background-color: #39FF14;"></div>
+      <div>2015-2024 Impacts</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background-color: #EE4B2B;"></div>
+      <div>2025 Events</div>
+    </div>
   </div>
-  <div class="legend-item">
-    <div class="legend-color" style="background-color: #EE4B2B;"></div>
-    <div>2025 Events</div>
-  </div>
-</div>
   
-  <button id="resumeSpinBtn">▶ Rotate Globe</button>
+  <button class="control-button" id="resumeSpinBtn">▶ Rotate Globe</button>
 
   <!-- Game-style label -->
   <div class="game-label" id="gameLabel">
@@ -561,15 +561,17 @@
     <div class="label-content">
       <div class="label-left">
         <div class="label-description" id="labelDescription">Description</div>
-        <div class=" citation-source" id="descriptionCitation">Citation</div>     
+        <div class="citation-source" id="descriptionCitation">Citation</div>     
         <div class="label-coords" id="labelCoords">[Coords]</div>
         <div class="color-palette" id="colorPalette">
+        </div>
+      </div>
+      <div class="label-video">
+        <div class="label-video-placeholder"> No video available </div>
+      </div>
     </div>
-    </div>
-  <div class="label-video">
-      <div class="label-video-placeholder"> No video available </div>
-    </div>
-</div>
+  </div>
+
   <script type="module">
     import * as THREE from 'https://esm.sh/three';
 
@@ -844,6 +846,7 @@
       { name: "Yakutia, Russia", lat: 66.4, lng: 129.1, color: "#39FF14" }
     ];
 
+    
     let pulseTime = 0;
     const pulseSpeed = 0.05;
     const minRadius = 1;
@@ -854,20 +857,6 @@
       return minRadius + (maxRadius - minRadius) * (0.5 + 0.5 * Math.sin(pulseTime + phase));
     }
 
-    // const gameLabel = document.getElementById('gameLabel');
-    // // const labelTitle = document.getElementById('labelTitle');
-    // // const labelContent = document.getElementById('labelContent');
-    // // const labelCoords = document.getElementById('labelCoords');
-    // const closeBtn = document.getElementById('closeBtn');
-    // const overlay = document.getElementById('overlay');
-
-    // const colorPalette = document.getElementById('colorPalette');
-
-    // closeBtn.addEventListener('click', () => {
-    //   gameLabel.style.display = 'none';
-    // });
-
-    //PALETTE 
     function updateColorPalette(palette){
       colorPalette.innerHTML= `
       <div class="color-palette-title">LEGEND</div>
@@ -879,21 +868,18 @@
       `).join('')}
     `;
     }
+
     const gameLabel = document.getElementById('gameLabel');
     const closeBtn = document.getElementById('closeBtn');
     const overlay = document.getElementById('overlay');
     const colorPalette = document.getElementById('colorPalette');
 
-    let currentVideo = null; 
-
     function closeLabel(){
       gameLabel.style.display = 'none';
       overlay.style.display = 'none';
       document.getElementById('globeViz').classList.remove('globe-blur');
-      //PAUSE VIDEO WHEN CLOSED
       const videos = document.querySelectorAll('.label-video video');
       videos.forEach(video => video.pause()); 
-      //classList.remove('blur-background')
     }
 
     closeBtn.addEventListener('click', closeLabel); 
@@ -908,39 +894,31 @@
         if (!point) return;
         const location = locationInfo[point.name]; 
 
-        //LABEL DETAILS
         document.getElementById('labelTitle').textContent = point.name; 
         document.getElementById('labelDescription').textContent = location.description; 
         document.getElementById('labelCoords').textContent = `Lat: ${point.lat.toFixed(2)}°, Lng: ${point.lng.toFixed(2)}°`; 
         document.getElementById('descriptionCitation').textContent = location.citation || ''; 
 
-      //UPDATE VIDEO
-      const videoContainer = document.querySelector('.label-video');
-      videoContainer.innerHTML = ''; 
+        const videoContainer = document.querySelector('.label-video');
+        videoContainer.innerHTML = ''; 
 
-      if(location.video) {
-        const video = document.createElement('video'); 
-        video.src = location.video; 
-        video.controls = true; 
-        video.muted = true; //FOR BROWSER AUTOPLAY;
-        video.autoplay = true; 
-        video.style.width = '100%';
-        video.style.height = '100%';
-        videoContainer.appendChild(video); 
-      }else{
-        videoContainer.innerHTML = '<div class="label-video-placeholder"> No video available </div>';
-      }
-
+        if(location.video) {
+          const video = document.createElement('video'); 
+          video.src = location.video; 
+          video.controls = true; 
+          video.muted = true;
+          video.autoplay = true; 
+          video.style.width = '100%';
+          video.style.height = '100%';
+          videoContainer.appendChild(video); 
+        } else {
+          videoContainer.innerHTML = '<div class="label-video-placeholder"> No video available </div>';
+        }
 
         updateColorPalette(location.palette); 
         gameLabel.style.display = 'block';
         overlay.style.display = 'block';
-        document.getElementById('globeViz').classList.add('blur-background')
-
-        // labelTitle.textContent = point.name;
-        // labelContent.textContent = locationInfo[point.name];
-        // labelCoords.textContent = `Lat: ${point.lat.toFixed(2)}°, Lng: ${point.lng.toFixed(2)}°`;
-        // gameLabel.style.display = 'block';
+        document.getElementById('globeViz').classList.add('globe-blur');
       });
 
     function animate() {
@@ -949,12 +927,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-
-    // document.addEventListener('click', (e) => {
-    //   if (!gameLabel.contains(e.target)) {
-    //     gameLabel.style.display = 'none';
-    //   }
-    // });
 
     function createStarfield() {
       const geometry = new THREE.BufferGeometry();
@@ -980,7 +952,6 @@
       "North America": { lat: 40, lng: -100 },
       "South America": { lat: -15, lng: -60 },
       "Australia": { lat: -25, lng: 135 }
-      //"Antarctica": { lat: -80, lng: 0 }
     };
 
     document.getElementById('continentMenu').addEventListener('change', (e) => {
@@ -1002,60 +973,20 @@
 
     infoBtn.addEventListener('click', () => {
       infoModal.style.display = 'flex'; 
-      document.getElementById('globeViz').classList.remove('globe-blur');
-
-    })
+      document.getElementById('globeViz').classList.add('globe-blur');
+    });
 
     closeModalBtn.addEventListener('click', () => {
       infoModal.style.display = 'none'; 
-      document.getElementById('globeViz').classList.remove('globe-blur')
-    })
+      document.getElementById('globeViz').classList.remove('globe-blur');
+    });
 
     infoModal.addEventListener('click', (e) => {
       if (e.target === infoModal){
         infoModal.style.display = 'none'; 
-        document.getElementById('globeViz').classList.remove('globe-blur')
+        document.getElementById('globeViz').classList.remove('globe-blur');
       }
     });
   </script>
 </body>
 </html>
-
-
-  <!-- <div class="modal-overlay" id="infoModal">
-    <div class="modal">
-      <h2>Spectral Sounds</h2>
-      <h3>Concept</h3>
-      <p>“Spectral Sounds” reimagines satellite imagery into more ambient, abstracted virtual environments and soundscapes. This project explores how Earth’s spectral changes can engage more than one sense when translated into generative music.</p>
-      <p>This piece lends a tone to visual changes that are not typically audible but are most definitely felt. Motivated by the criticality of climate change, Spectral Sounds reframe how we engage with sweeping environmental changes, making it tangible through sounds and sight. </p>
-
-      <h3>Process</h3>
-      <h4>Data Collection</h4>
-      <p>I sourced satellite imagery from Landsat 8 via the USGS through Google Earth Engine. </p>
-      <p>Using the Tassled Cap Transformation technique, I compress the multispectral bands into three axes: brightness, greenness, and wetness using the RGB channels.</p>
-
-      <h4>Video</h4>
-      <p>I used After Effects to sequence the imagery retrieved from Google Earth Engine. From here, videos would then be exported for frame-by-frame analysis using the HTML5 and Canvas API script and assigned a set of chords.</p>
-
-      <h4>Sonification</h4>
-      <p>I used Vibrant.js to extract the five most dominant colors of each video frame.  Each color was mapped to a designated music note according to its respective hex code.</p>
-      <p>With  Tone.js, I generated one chord per frame based on these notes, syncing sound to each frame processed from the video.</p>
-      <p>To export the audio track, I used Tone.js Recorder and Lame.js to save it as a WAV file.</p>
-      <p>Finally, I returned to After Effects to synchronize the audio tracks to each original video.</p>
-
-      <h4>Web</h4>
-      <p>The website was built using the big three (HTML, CSS, and JavaScript).</p>
-      <p>I used TinEye to help extract color palettes of each video for each video legend. </p>
-      <p>This site is hosted on Github Pages</p>
-      <p>The interactive globe was built using source code from globe.gl</p>
-      
-
-      <h3>Acknowledgments</h3>
-      <p>I would like to thank my capstone professor, Victoria Vesna, and my TA, Chong Xu, for their ongoing support and guidance throughout this project. </p>
-      <p>Special thanks to Laurie McDonald, Jonathan Cecil, and Gareth Walsh at the Fab Lab for their help with this installation. </p>
-      <p>Shout-out to my peers for their encouragement and thoughtful critiques. Your insight has strengthened this piece, and for that,  I would like to express my gratitude.</p>
-      <p>Finally, thank you to everyone in my life: family, colleagues, friends, for taking the time to see this project.</p>
-      <p>Thank you.</p>
-      <button id="closeModalBtn"> Close</button>
-  </div>
-</div> -->
