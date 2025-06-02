@@ -4,9 +4,23 @@
   <meta charset="UTF-8" />
   <title>Spectral Sounds</title>
   <style> 
-    body { margin: 0; } 
+    :root {
+      --primary-color: #39FF14;
+      --secondary-color: #EE4B2B;
+      --text-color: white;
+      --background-color: rgba(0, 0, 0, 0.8);
+      --modal-bg: #1e1e1e;
+      --font-main: monospace;
+    }
+    
+    body { 
+      margin: 0;
+      overflow-x: hidden;
+      font-family: var(--font-main);
+    } 
+    
     #globeViz {
-      position: absolute; 
+      position: fixed; 
       top: 0; 
       left: 0; 
       width: 100vw;
@@ -15,62 +29,117 @@
       transition: filter 0.3s ease;
     }
 
-    .titleTop {
-      position: absolute; 
-      top: 3vh; 
-      left: 2vw; 
-      color: white; 
-      font-family: monospace; 
-      font-size: clamp(2rem, 5vw, 5rem);
-      /* background: rgba(0, 0, 0, 0.5);  */
-      padding: 1vh 1.5vw; 
-      border-radius: 1vh;
-       max-width: 15vw;
-      pointer-events: none;
-      /* z-index: 10;  */
-    }
-    .titleBottom {
-      position: absolute; 
-      top: 15vh; 
-      left: 2vw; 
-      color: white; 
-      font-family: monospace; 
-      font-size: clamp(2rem, 5vw, 5rem);
-     /* background: rgba(0, 0, 0, 0.5);  */
-      padding: 1vh 1.5vw; 
-      border-radius: 1vh;
-      pointer-events: none;
-       /* z-index: 10;  */
-    }
-    /* .info{
-      position: absolute; 
-      top: 65vh; 
-      left: 2vw; 
-      color: white; 
-      font-family: monospace; 
-      font-size: clamp(0.875rem, 1.25vw, 0.625rem); */
-      /* background: rgba(0, 0, 0, 0.5);  */
-      /* padding: 1vh 1.5vw; 
-      border-radius: 1vh;
-      pointer-events: none; */
-       /* z-index: 10;  */
-    /* } */
-    .info-button{
+    /* Text Elements */
+    .text-element {
       position: absolute;
-      bottom: 3vh; 
-      left: 2vw; 
-      background: #333; 
-      color: #fff; 
-      border: none; 
-      padding: 10px 15px; 
-      cursor: pointer; 
-      /* z-index: 1000;  */
-      border-radius: 5px; 
-      font-family: monospace; 
+      color: var(--text-color); 
+      font-family: var(--font-main);
+      pointer-events: none;
+      padding: 1vh 1.5vw;
+      border-radius: 1vh;
+      max-width: 90%;
+      left: 2vw;
     }
-    .modal-overlay{
+
+    .titleTop {
+      top: 3vh;
+      font-size: clamp(1.5rem, 5vw, 3.5rem);
+    }
+
+    .titleBottom {
+      top: 15vh;
+      font-size: clamp(1.2rem, 4vw, 2.5rem);
+    }
+
+    .intro-text {
+      top: 30vh;
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      max-width: 40vw;
+    }
+
+    .intro-text-2 {
+      top: 45vh;
+      font-size: clamp(0.7rem, 2vw, 1rem);
+      max-width: 40vw;
+    }
+
+    /* Buttons and Controls */
+    .control-button {
+      position: absolute;
+      padding: 1vh 1.5vw;
+      font-family: var(--font-main);
+      background: var(--background-color);
+      color: var(--text-color);
+      border: 1px solid var(--text-color);
+      border-radius: 0.5vh;
+      cursor: pointer;
+      z-index: 10;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+    }
+
+    .info-button {
+      bottom: 3vh;
+      left: 2vw;
+    }
+
+    #resumeSpinBtn {
+      bottom: 3vh;
+      right: 2vw;
+    }
+
+    /* Continent Menu */
+    #continentMenu {
+      position: absolute;
+      top: 3vh;
+      right: 2vw;
+      font-family: var(--font-main);
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      padding: 0.5vh 1vw;
+      border-radius: 0.5vh;
+      background: var(--background-color);
+      color: var(--text-color);
+      border: 1px solid var(--text-color);
+      z-index: 10;
+    }
+
+    /* Legend */
+    .legend {
+      position: absolute; 
+      top: 10vh; 
+      right: 2vw; 
+      color: var(--text-color); 
+      font-family: var(--font-main); 
+      padding: 10px; 
+      background: var(--background-color);
+      border-radius: 5px;
+      width: clamp(120px, 15vw, 160px);
+    }
+
+    .legend-title {
+      font-size: clamp(0.7rem, 1.5vw, 0.9rem); 
+      margin-bottom: 8px; 
+      padding-bottom: 4px;
+    }
+
+    .legend-item {
+      display: flex; 
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
       position: fixed; 
-      top: 0; left: 0; 
+      top: 0; 
+      left: 0; 
       width: 100vw; 
       height: 100vh; 
       background: rgba(0, 0, 0, 0.8); 
@@ -78,152 +147,99 @@
       justify-content: center; 
       align-items: center; 
       z-index: 999; 
-      font-family: monospace; 
+      font-family: var(--font-main); 
     }
+
     .modal {
-      background: #1e1e1e; 
-      padding: 30px; 
+      background: var(--modal-bg); 
+      padding: 20px; 
       border-radius: 10px; 
-      max-width: 700px; 
-      width: 90%; 
+      max-width: 90vw; 
+      width: min(700px, 90%);
       max-height: 90vh; 
       overflow-y: auto;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); 
-      font-family: monospace; 
     }
+
     .modal h2 {
-      color:  #39FF14; 
-      font-family: monospace; 
-      font-size: 1.5rem; 
-      margin-bottom: 1.5rem; 
-      border-bottom: 1px solid #39FF14;
+      color: var(--primary-color); 
+      font-size: clamp(1.2rem, 3vw, 1.5rem); 
+      margin-bottom: 1rem; 
+      border-bottom: 1px solid var(--primary-color);
       padding-bottom: 0.5rem; 
-
     }
+
     .modal h3 {
-      color:  #39FF14; 
-      font-family: monospace; 
-      font-size: 1.2rem; 
-      margin-top: 1.5rem; 
-      border-bottom: 0.75px solid #39FF14;
-      /* padding-bottom: 0.5rem;  */
-
+      color: var(--primary-color); 
+      font-size: clamp(1rem, 2.5vw, 1.2rem); 
+      margin-top: 1.2rem; 
+      border-bottom: 0.75px solid var(--primary-color);
     }
+
     .modal h4 {
-      color:  #39FF14; 
-      font-family: monospace; 
-      font-size: 1rem; 
+      color: var(--primary-color); 
+      font-size: clamp(0.9rem, 2vw, 1rem); 
       margin-top: 1rem; 
-      border-bottom: 0.5rem;
-      /* padding-bottom: 0.5rem;  */
-
     }
-    .modal p{
+
+    .modal p, .modal li {
       color: rgba(255, 255, 255, 0.7); 
-      font-family: monospace; 
-      font-size: 0.9rem; 
+      font-size: clamp(0.8rem, 1.5vw, 0.9rem); 
       line-height: 1.5;
       margin-bottom: 0.75rem;
-      /* padding-bottom: 0.5rem;  */
-
-    }
-    .modal strong{
-      color:  rgb(225, 228, 69); 
-      font-family: monospace; 
-      font-size: 0.9rem; 
-      line-height: 1.5;
-      margin-bottom: 0.75rem;
-      /* padding-bottom: 0.5rem;  */
-
     }
 
-    .modal li{
-      color: rgba(255, 255, 255, 0.4); 
-      font-family: monospace; 
-      font-size: 0.9rem; 
-      line-height: 1.5;
-      margin-bottom: 0.75rem;
-      /* padding-bottom: 0.5rem;  */
-
+    .modal strong {
+      color: rgb(225, 228, 69); 
     }
-    .modal a{
+
+    .modal a {
       color: #d4e884; 
       cursor: pointer; 
     }
-    .modal a:hover{
+
+    .modal a:hover {
       color: #eaf4c2;
       text-decoration: underline dotted;
     }
-    .intro-text {
-      position: absolute;
-      top: 30vh;
-      left: 2vw;
-      color: white;
-      font-family: monospace;
-      font-size: clamp(0.5rem, 1vw, 1rem);
-      /* background: rgba(0, 0, 0, 0.5);  */
-      padding: 1vh 1.5vw;
-      border-radius: 1vh;
-      max-width: 15vw;
-      pointer-events: none;
-       /* z-index: 10;  */
 
-      }
-      
-      .intro-text-2 {
-      position: absolute;
-      top: 45vh;
-      left: 2vw;
-      color: white;
-      font-family: monospace;
-      font-size: clamp(0.5rem, 1vw, 1rem);
-      /* background: rgba(0, 0, 0, 0.5);  */
-      padding: 1vh 1.5vw;
-      border-radius: 1vh;
-      max-width: 15vw;
-      pointer-events: none;
-      /* z-index: 10;  */
-      }
-
-      .modal button{
+    .modal button {
       background: #333; 
       color: #fff; 
       border: none; 
       padding: 8px 16px; 
       margin-top: 1rem; 
       cursor: pointer; 
-      font-family: monospace;
+      font-family: var(--font-main);
       border-radius: 4px; 
+      font-size: clamp(0.8rem, 1.5vw, 0.9rem);
     }
-    .modal button:hover{
-      background: #39FF14;
+
+    .modal button:hover {
+      background: var(--primary-color);
       color: black;
     }
-    .qr-code {
-      position: absolute;
-      bottom: 10vh;
-      left: 3vw;
-      width: 20vh;
-      height: 20vh;
-      /* z-index: 10; */
-    }
+
+    /* Game Label */
     .game-label {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 1080px;
-      height: 540px;
-      background: rgba(0, 0, 0, 1);
+      width: min(90vw, 1080px);
+      height: min(80vh, 540px);
+      background: rgba(0, 0, 0, 0.95);
       border: 2px solid #fff;
       border-radius: 10px;
-      padding: 20px;
+      padding: 15px;
       color: white;
-      font-family: monospace;
+      font-family: var(--font-main);
       z-index: 100;
       display: none;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      overflow: auto;
     }
+
     .label-header {
       display: flex;
       justify-content: space-between;
@@ -232,11 +248,12 @@
       border-bottom: 1px solid #fff;
       padding-bottom: 5px;
     }
+
     .label-title {
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2vw, 1.2rem);
       font-weight: bold;
-      color: #fff;
     }
+
     .close-btn {
       background: #ff0000;
       color: white;
@@ -250,67 +267,85 @@
       align-items: center;
       justify-content: center;
     }
+
     .label-content {
       display: flex; 
-      gap: 20px;
-/*    font-size: 0.9rem;
-      line-height: 1.4; */
+      flex-direction: column;
+      gap: 15px;
     }
-    .label-left{
+
+    @media (min-width: 768px) {
+      .label-content {
+        flex-direction: row;
+      }
+    }
+
+    .label-left {
       flex: 1; 
     }
-    .label-description{
-      font-size: 14;
-      line-height: 2; 
-      margin-top: 1rem; 
-      margin-bottom: 1rem; 
-      max-width: 30vw;
+
+    .label-description {
+      font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+      line-height: 1.6; 
+      margin: 1rem 0; 
     }
+
     .label-coords {
       margin-bottom: 15px;
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 1.2vw, 0.8rem);
       color: #ccc;
     }
 
-    .citation-source{
+    .citation-source {
       margin-bottom: 15px;
-      font-size: 0.6rem;
+      font-size: clamp(0.6rem, 1vw, 0.7rem);
       color: rgba(251, 251, 251, 0.6);
     }
 
     /* Video Content */
-    .label-video{
-      width: 480px;
-      height: 480px; 
+    .label-video {
+      width: 100%;
+      height: auto;
+      max-width: 480px;
+      aspect-ratio: 1/1;
       background-color: #333333; 
       display: flex; 
       align-items: center;
       justify-content: center; 
       border-radius: 5px; 
       overflow: hidden; 
+      margin-top: 15px;
     }
 
-    .label-video-placeholder{
+    @media (min-width: 768px) {
+      .label-video {
+        margin-top: 0;
+      }
+    }
+
+    .label-video-placeholder {
       color: #aaa; 
       font-size: 1rem; 
+      padding: 20px;
+      text-align: center;
     }
 
-    .label-video video{
+    .label-video video {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
+    /* Color Palette */
     .color-palette {
       margin-top: 10px; 
     }
 
-    .color-palette-title{
-      font-size: 0.9rem; 
+    .color-palette-title {
+      font-size: clamp(0.7rem, 1.5vw, 0.9rem); 
       font-weight: lighter;
       margin-bottom: 10px; 
       color: #ccc; 
-
     }
     
     .palette-row {
@@ -326,19 +361,17 @@
       border: 0.75px solid #fff; 
       margin-right: 8px;
       margin-bottom: 6px;  
+      flex-shrink: 0;
     }
     
     .color-label {
-      font-size: 0.8rem; 
+      font-size: clamp(0.7rem, 1.2vw, 0.8rem); 
       color: #ddd; 
       margin-bottom: 6px;  
     }
 
-    /* .blur-background{
-      filter: blur(120px) brightness(0.8);
-      transition: filter 0.3s ease
-    } */
-    .overlay{
+    /* Overlay Effects */
+    .overlay {
       position: fixed; 
       top: 0; 
       left: 0; 
@@ -351,65 +384,63 @@
       display: none;
       pointer-events: auto; 
     }
-    .globe-blur{
+
+    .globe-blur {
       filter: blur(8px) brightness(0.7);
       transition: filter 0.3s ease; 
-    }  
-    .legend {
-      position: absolute; 
-      top: 10vh; 
-      right: 2vw; 
-      color: white; 
-      font-family: monospace; 
-      padding: 10px; 
-      width: 140px; 
-    }
-    .legend-title{
-      font-size: 0.9rem; 
-      margin-bottom: 8px; 
-      color: white; 
-      padding-bottom: 4px;
-    }
-    .legend-item{
-      display: flex; 
-      align-items: center;
-      margin-bottom: 5px;
-      font-size: 0.8rem;
-    }
-    .legend-color {
-      width: 12px;
-      height: 12px;
-      margin-right: 8px;
-    }
-    /* Continent menu */
-    #continentMenu {
-      position: absolute;
-      top: 3vh;
-      right: 2vw;
-      /* z-index: 10; */
-      font-family: monospace;
-      font-size: 1rem;
-      padding: 0.5vh 1vw;
-      border-radius: 0.5vh;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      border: 1px solid white;
     }
 
-    /* Resume rotation button */
-    #resumeSpinBtn {
-      position: absolute;
-      bottom: 3vh;
-      right: 2vw;
-      padding: 1vh 1.5vw;
-      font-family: monospace;
-      font-size: 1rem;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      border: 1px solid white;
-      border-radius: 0.5vh;
-      cursor: pointer;
-      /* z-index: 10; */
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .text-element {
+        max-width: 80vw;
+      }
+      
+      .intro-text, .intro-text-2 {
+        max-width: 70vw;
+      }
+      
+      .legend {
+        width: 120px;
+        top: 8vh;
+      }
+      
+      .game-label {
+        width: 95vw;
+        height: 90vh;
+      }
+      
+      .label-content {
+        flex-direction: column;
+      }
+      
+      .label-video {
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .titleTop {
+        top: 2vh;
+      }
+      
+      .titleBottom {
+        top: 10vh;
+      }
+      
+      .intro-text {
+        top: 25vh;
+      }
+      
+      .intro-text-2 {
+        top: 35vh;
+      }
+      
+      .control-button, #continentMenu {
+        padding: 0.5vh 1vw;
+        font-size: 0.8rem;
+      }
     }
   </style>
   <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
