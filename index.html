@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <title>Spectral Sounds</title>
   <style> 
-  :root {
-    --primary-color: #39FF14;
-    --secondary-color: #EE4B2B;
-    --tertiary-color: rgba(210, 180, 140, 0.5);
-    --text-color: rgba(255, 255, 255, 0.9);
-    --background-color: rgba(0, 0, 0, 0.85);
-    --modal-bg: #1e1e1e;
-    --font-main: monospace;
-  }
+    :root {
+      --primary-color: #39FF14;
+      --secondary-color: #EE4B2B;
+      --text-color: white;
+      --background-color: rgba(0, 0, 0, 0.8);
+      --modal-bg: #1e1e1e;
+      --font-main: monospace;
+    }
+    
     body { 
       margin: 0;
       overflow-x: hidden;
@@ -30,20 +30,18 @@
       z-index: 1; 
     }
 
-    /* TEXT ELEMENTS */
-  .text-element {
-    position: absolute;
-    color: var(--text-color); 
-    font-family: var(--font-main);
-    pointer-events: none;
-    padding: 1vh 1.5vw;
-    border-radius: 1vh;
-    max-width: 90%;
-    left: 2vw;
-    z-index: 100;
-/*     background-color: var(--background-color); */
-    backdrop-filter: blur(2px);
-   }
+    /* Text Elements */
+    .text-element {
+      position: absolute;
+      color: var(--text-color); 
+      font-family: var(--font-main);
+      pointer-events: none;
+      padding: 1vh 1.5vw;
+      border-radius: 1vh;
+      max-width: 90%;
+      left: 2vw;
+      z-index: 10; 
+    }
 
     .titleTop {
       top: 3vh;
@@ -191,12 +189,6 @@
       margin-top: 1rem; 
     }
 
-      .modal h5 {
-      color: var(--tertiary-color); 
-      font-size: clamp(0.8rem, 1.75vw, 0.8rem); 
-      margin-top: 0.8rem; 
-    }
-
     .modal p, .modal li {
       color: rgba(255, 255, 255, 0.7); 
       font-size: clamp(0.8rem, 1.5vw, 0.9rem); 
@@ -284,11 +276,9 @@
     }
 
     .label-content {
-      display: flex;
+      display: flex; 
       flex-direction: column;
       gap: 15px;
-      height: 100%; 
-      justify-content: space-between; 
     }
 
     @media (min-width: 768px) {
@@ -331,25 +321,6 @@
       justify-content: center; 
       border-radius: 5px; 
       overflow: hidden; 
-      margin-top: 15px;
-    }
-    .headphone-note {
-      font-style: italic;
-      font-size: clamp(0.6rem, 1.1vw, 0.8rem);
-      color: rgba(255, 255, 255, 0.6);
-      margin-top: auto; 
-      padding-top: 10px;
-      text-align: center;
-      width: 100%;
-      font-family: var(--font-main);
-      border-top: 1px solid rgba(255,255,255,0.2); 
-    }
-    .video-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 480px;
       margin-top: 15px;
     }
 
@@ -454,15 +425,6 @@
         width: 100%;
         max-width: none;
       }
-
-      .video-container {
-        margin-top: 20px;
-        max-width: 100%;
-      }
-      .headphone-note {
-        font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-        margin-top: 10px;
-      }
     }
 
     @media (max-width: 480px) {
@@ -510,11 +472,9 @@
       <p>Using the <strong>Tasseled Cap Transformation</strong> technique, I compress the multispectral bands into three axes: brightness, greenness, and wetness using the RGB channels.</p>
 
       <h4>Video</h4>
-      <h5>I chose at least one site from each continent, excluding Antarctica, for this project. These places are those that are not as well known as, say, the Amazon. The videos need to be unmuted by you to circumvent  browser permissions.</h5>
       <p>I used <strong>After Effects</strong> to sequence the imagery retrieved from Google Earth Engine. From here, videos would then be exported for frame-by-frame analysis using the HTML5 and Canvas API script and assigned a set of chords.</p>
 
       <h4>Sonification</h4>
-      <h5> I designed the sound mapped to each video to be a guttural, continental sound. Pan and other features were added to the code, mapped to changes in color, and the map changes were made audible. </h5>
       <p>I used <strong>Vibrant.js </strong> to extract the five most dominant colors of each video frame.  Each color was mapped to a designated music note according to its respective hex code.</p>
       <p>With <strong> Tone.js</strong>, I generated one chord per frame based on these notes, syncing sound to each frame processed from the video.</p>
       <p>To export the audio track, I used <strong>Tone.js Recorder</strong> and <strong>Lame.js</strong> to save it as a WAV file.</p>
@@ -613,7 +573,6 @@
       <div class="label-video">
         <div class="label-video-placeholder"> No video available </div>
       </div>
-<!--       <p class="headphone-note">For optimal experience, we recommend using headphones</p> -->
     </div>
   </div>
 
