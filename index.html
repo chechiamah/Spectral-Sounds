@@ -284,9 +284,11 @@
     }
 
     .label-content {
-      display: flex; 
+      display: flex;
       flex-direction: column;
       gap: 15px;
+      height: 100%; 
+      justify-content: space-between; 
     }
 
     @media (min-width: 768px) {
@@ -335,10 +337,20 @@
       font-style: italic;
       font-size: clamp(0.6rem, 1.1vw, 0.8rem);
       color: rgba(255, 255, 255, 0.6);
-      margin-top: 8px;
+      margin-top: auto; 
+      padding-top: 10px;
       text-align: center;
       width: 100%;
       font-family: var(--font-main);
+      border-top: 1px solid rgba(255,255,255,0.2); 
+    }
+    .video-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      margin-top: 15px;
     }
 
     @media (min-width: 768px) {
@@ -443,6 +455,10 @@
         max-width: none;
       }
 
+      .video-container {
+        margin-top: 20px;
+        max-width: 100%;
+      }
       .headphone-note {
         font-size: clamp(0.7rem, 1.5vw, 0.9rem);
         margin-top: 10px;
