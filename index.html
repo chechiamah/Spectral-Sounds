@@ -4,16 +4,15 @@
   <meta charset="UTF-8" />
   <title>Spectral Sounds</title>
   <style> 
-    :root {
-      --primary-color: #39FF14;
-      --secondary-color: #EE4B2B;
-      --tertiary-color: rgb(210, 180, 140, 0.5)
-      --text-color: white;
-      --background-color: rgba(0, 0, 0, 0.8);
-      --modal-bg: #1e1e1e;
-      --font-main: monospace;
-    }
-    
+  :root {
+    --primary-color: #39FF14;
+    --secondary-color: #EE4B2B;
+    --tertiary-color: rgba(210, 180, 140, 0.5);
+    --text-color: rgba(255, 255, 255, 0.9);
+    --background-color: rgba(0, 0, 0, 0.85);
+    --modal-bg: #1e1e1e;
+    --font-main: monospace;
+  }
     body { 
       margin: 0;
       overflow-x: hidden;
@@ -32,17 +31,19 @@
     }
 
     /* Text Elements */
-    .text-element {
-      position: absolute;
-      color: var(--text-color); 
-      font-family: var(--font-main);
-      pointer-events: none;
-      padding: 1vh 1.5vw;
-      border-radius: 1vh;
-      max-width: 90%;
-      left: 2vw;
-      z-index: 10; 
-    }
+  .text-element {
+    position: absolute;
+    color: var(--text-color); 
+    font-family: var(--font-main);
+    pointer-events: none;
+    padding: 1vh 1.5vw;
+    border-radius: 1vh;
+    max-width: 90%;
+    left: 2vw;
+    z-index: 100;
+    background-color: var(--background-color);
+    backdrop-filter: blur(2px);
+   }
 
     .titleTop {
       top: 3vh;
