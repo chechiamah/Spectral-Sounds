@@ -331,6 +331,15 @@
       overflow: hidden; 
       margin-top: 15px;
     }
+    .headphone-note {
+      font-style: italic;
+      font-size: clamp(0.6rem, 1.1vw, 0.8rem);
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+      text-align: center;
+      width: 100%;
+      font-family: var(--font-main);
+    }
 
     @media (min-width: 768px) {
       .label-video {
@@ -432,6 +441,11 @@
       .label-video {
         width: 100%;
         max-width: none;
+      }
+
+      .headphone-note {
+        font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+        margin-top: 10px;
       }
     }
 
@@ -583,6 +597,7 @@
       <div class="label-video">
         <div class="label-video-placeholder"> No video available </div>
       </div>
+      <p class="headphone-note">For optimal experience, we recommend using headphones</p>
     </div>
   </div>
 
