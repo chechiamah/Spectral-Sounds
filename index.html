@@ -7,6 +7,7 @@
     :root {
       --primary-color: #39FF14;
       --secondary-color: #EE4B2B;
+      --tertiary-color: rgba(98, 93, 67, 0.6);
       --text-color: white;
       --background-color: rgba(0, 0, 0, 0.8);
       --modal-bg: #1e1e1e;
@@ -187,6 +188,11 @@
       color: var(--primary-color); 
       font-size: clamp(0.9rem, 2vw, 1rem); 
       margin-top: 1rem; 
+    }
+    .modal h5 {
+      color: var(--tertiary-color); 
+      font-size: clamp(0.8rem, 1.75vw, 0.8rem); 
+      margin-top: 0.8rem; 
     }
 
     .modal p, .modal li {
@@ -472,9 +478,11 @@
       <p>Using the <strong>Tasseled Cap Transformation</strong> technique, I compress the multispectral bands into three axes: brightness, greenness, and wetness using the RGB channels.</p>
 
       <h4>Video</h4>
+      <h5>I chose at least one site from each continent, excluding Antarctica, for this project. These places are those that are not as well known as, say, the Amazon. The videos need to be unmuted by you to circumvent  browser permissions.</h5>
       <p>I used <strong>After Effects</strong> to sequence the imagery retrieved from Google Earth Engine. From here, videos would then be exported for frame-by-frame analysis using the HTML5 and Canvas API script and assigned a set of chords.</p>
 
       <h4>Sonification</h4>
+      <h5> I designed the sound mapped to each video to be a guttural, continental sound. Pan and other features were added to the code, mapped to changes in color, and the map changes were made audible. </h5>
       <p>I used <strong>Vibrant.js </strong> to extract the five most dominant colors of each video frame.  Each color was mapped to a designated music note according to its respective hex code.</p>
       <p>With <strong> Tone.js</strong>, I generated one chord per frame based on these notes, syncing sound to each frame processed from the video.</p>
       <p>To export the audio track, I used <strong>Tone.js Recorder</strong> and <strong>Lame.js</strong> to save it as a WAV file.</p>
