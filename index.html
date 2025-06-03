@@ -388,6 +388,23 @@
       color: #ddd; 
       margin-bottom: 6px;  
     }
+    .audio-reminder {
+      font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+      color: var(--primary-color);
+      margin: 1rem 0 0.5rem 0;
+      padding: 0.5rem;
+      background: rgba(57, 255, 20, 0.1);
+      border-left: 2px solid var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+.headphone-icon {
+      font-size: 1.2em;
+      flex-shrink: 0;
+    }
 
     /* OVERLAY EFFECTS */
     .overlay {
@@ -585,6 +602,9 @@
         <div class="citation-source" id="descriptionCitation">Citation</div>     
         <div class="label-coords" id="labelCoords">[Coords]</div>
         <div class="color-palette" id="colorPalette">
+        <div class="audio-reminder">
+    <span class="headphone-icon">🎧</span> Remember to put on headphones and unmute the video
+  </div>
         </div>
       </div>
       <div class="label-video">
