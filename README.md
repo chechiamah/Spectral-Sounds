@@ -1,5 +1,5 @@
 # Spectral-Sounds
-An Audiovisual Exploration of PCA in Remote Sensing
+An Audiovisual Exploration of TCT in Remote Sensing
 
 This project explores Principal Component Analysis in remote sensing and transforms it into a visual and auditory experience.
 
