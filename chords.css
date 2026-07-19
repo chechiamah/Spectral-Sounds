@@ -1,0 +1,65 @@
+    body {
+      font-family: "Lucida Console", monospace;
+      padding: 20px;
+      background-color:rgb(240, 240, 240);
+    }
+    #progressContainer {
+      margin-top: 10px;
+      width: 100%;
+      background: #ddd;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #301934, #aea3d4);
+      transition: width 0.2s;
+    }
+    #downloadLink, #previewButton {
+      margin-top: 15px;
+      display: none;
+      padding: 8px 15px;
+      background: #301934;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: monospace;
+    }
+    #previewButton {
+      margin-right: 10px;
+    }
+    #audioPlayer {
+      margin-top: 15px;
+      width: 100%;
+      display: none;
+    }
+    #colorMap {
+      margin: 20px 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    #colorMap th, #colorMap td {
+      border: 0.5px solid #383832;
+      padding: 6px;
+      text-align: left;
+    }
+    #colorMap th {
+      background-color: #FFFDD0;
+    }
+    .color-swatch {
+      width: 15px;
+      height: 15px;
+      border: 0.5px solid #383832;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
